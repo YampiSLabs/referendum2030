@@ -1,0 +1,37 @@
+[project]
+name = "referendum2030-api"
+version = "0.1.0"
+description = "Django API for the fictitious Referendum 2030 civic demo."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+  "django>=6.0,<7.0",
+  "django-cors-headers>=4.9.0,<5.0.0",
+  "django-environ>=0.12.0,<1.0.0",
+  "django-ninja>=1.5.0,<2.0.0",
+  "psycopg[binary]>=3.3.0,<4.0.0",
+  "whitenoise>=6.11.0,<7.0.0"
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=9.0.0,<10.0.0",
+  "pytest-django>=4.11.0,<5.0.0",
+  "ruff>=0.14.0,<1.0.0"
+]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "referendum2030.settings.local"
+python_files = ["tests.py", "test_*.py", "*_tests.py"]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "DJ"]
+ignore = ["DJ008"]
+
+[tool.ruff.lint.per-file-ignores]
+"*/migrations/*.py" = ["E501", "I001"]

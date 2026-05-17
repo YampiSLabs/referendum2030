@@ -1,0 +1,13 @@
+# ruff: noqa: F403, I001
+from .base import env
+from .base import *  # noqa: F403
+
+DEBUG = False
+SECRET_KEY = env("SECRET_KEY")
+ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS")
+CORS_ALLOWED_ORIGINS = env("CORS_ALLOWED_ORIGINS")
+CSRF_TRUSTED_ORIGINS = env("CSRF_TRUSTED_ORIGINS", default=[])
+
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_SSL_REDIRECT = env.bool("SECURE_SSL_REDIRECT", default=False)
