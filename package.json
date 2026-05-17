@@ -1,0 +1,15 @@
+{
+  "name": "referendum2030",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Monorepo for the fictitious Referendum 2030 civic demo.",
+  "scripts": {
+    "dev": "docker compose up",
+    "dev:web": "pnpm --filter web dev",
+    "dev:api": "cd apps/api && uv run python manage.py runserver",
+    "lint": "pnpm --filter web lint && cd apps/api && uv run ruff check .",
+    "test": "cd apps/api && uv run pytest"
+  },
+  "packageManager": "pnpm@10.30.3"
+}
+
