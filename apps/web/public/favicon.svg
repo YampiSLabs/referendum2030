@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Referendum 2030">
+  <rect width="64" height="64" rx="10" fill="#f7f0df"/>
+  <path d="M14 18h36v28H14z" fill="#fffaf0" stroke="#641622" stroke-width="4"/>
+  <path d="M22 32l6 6 14-16" fill="none" stroke="#8f1d2c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M14 46h36" stroke="#e8c65a" stroke-width="5"/>
+</svg>

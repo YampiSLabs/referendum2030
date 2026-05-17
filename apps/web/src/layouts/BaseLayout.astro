@@ -1,0 +1,67 @@
+---
+import "../styles/global.css";
+import Disclaimer from "../components/Disclaimer.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const {
+  title,
+  description = "Simulació cívica fictícia del Referèndum 2030.",
+} = Astro.props;
+
+const nav = [
+  { href: "/", label: "Inici" },
+  { href: "/votar", label: "Votar" },
+  { href: "/resultados", label: "Resultats" },
+  { href: "/transparencia", label: "Transparència" },
+  { href: "/faq", label: "FAQ" },
+];
+---
+
+<!doctype html>
+<html lang="ca">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-white focus:p-3" href="#contingut">
+      Salta al contingut
+    </a>
+    <header class="border-b border-[var(--line)] bg-[var(--paper-strong)]">
+      <div class="container flex flex-col gap-4 py-4 md:flex-row md:items-center md:justify-between">
+        <a href="/" class="text-xl font-black tracking-normal text-[var(--red-dark)]">Referèndum 2030</a>
+        <nav aria-label="Navegació principal">
+          <ul class="flex flex-wrap gap-2">
+            {nav.map((item) => (
+              <li>
+                <a class="rounded-md px-3 py-2 font-semibold hover:bg-[#efe3ca]" href={item.href}>
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <Disclaimer />
+    <main id="contingut">
+      <slot />
+    </main>
+    <footer class="mt-16 border-t border-[var(--line)] bg-[var(--paper-strong)]">
+      <div class="container grid gap-3 py-8 text-sm text-[var(--muted)] md:grid-cols-[1fr_auto] md:items-center">
+        <p>Referèndum 2030. Demo cívica fictícia per a portfolio.</p>
+        <p>No recull dades personals reals.</p>
+      </div>
+    </footer>
+  </body>
+</html>

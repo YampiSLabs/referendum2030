@@ -1,0 +1,16 @@
+---
+interface Props {
+  label: string;
+  value: string;
+  detail: string;
+}
+
+const { label, value, detail } = Astro.props;
+---
+
+<article class="panel p-5">
+  <p class="text-sm font-bold uppercase text-[var(--muted)]">{label}</p>
+  <p class="mt-2 text-2xl font-black">{value}</p>
+  <p class="mt-2 text-sm leading-6 text-[var(--muted)]">{detail}</p>
+</article>
+

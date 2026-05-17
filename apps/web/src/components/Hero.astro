@@ -1,0 +1,51 @@
+---
+import { Vote, BarChart3 } from "lucide-react";
+---
+
+<section class="bg-[var(--paper)]">
+  <div class="container grid min-h-[68vh] items-center gap-10 py-14 md:grid-cols-[1.1fr_0.9fr]">
+    <div class="max-w-3xl">
+      <p class="mb-4 inline-flex rounded-md border border-[var(--line)] bg-[var(--paper-strong)] px-3 py-1 text-sm font-bold text-[var(--red-dark)]">
+        Demo cívica fictícia
+      </p>
+      <h1 class="text-4xl font-black leading-tight text-[var(--ink)] md:text-6xl">
+        Referèndum 2030
+      </h1>
+      <p class="mt-6 max-w-2xl text-lg leading-8 text-[var(--muted)]">
+        Simulador estàtic amb vot demo per token, resultats agregats i auditoria pública sense dades personals reals.
+      </p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a class="btn" href="/votar">
+          <Vote size={20} aria-hidden="true" />
+          Començar vot demo
+        </a>
+        <a class="btn btn-secondary" href="/resultados">
+          <BarChart3 size={20} aria-hidden="true" />
+          Veure resultats
+        </a>
+      </div>
+    </div>
+    <div class="panel p-6">
+      <div class="grid gap-4">
+        <div class="border-b border-[var(--line)] pb-4">
+          <p class="text-sm font-bold uppercase text-[var(--muted)]">Pregunta demo</p>
+          <p class="mt-2 text-2xl font-black">
+            Vols que Catalunya iniciï un procés constituent digital l’any 2030?
+          </p>
+        </div>
+        <div class="grid gap-3">
+          <div class="flex items-center justify-between rounded-md border border-[var(--line)] bg-white p-3">
+            <span>Sí</span><span class="font-bold text-[var(--red-dark)]">Opció</span>
+          </div>
+          <div class="flex items-center justify-between rounded-md border border-[var(--line)] bg-white p-3">
+            <span>No</span><span class="font-bold text-[var(--red-dark)]">Opció</span>
+          </div>
+          <div class="flex items-center justify-between rounded-md border border-[var(--line)] bg-white p-3">
+            <span>En blanc</span><span class="font-bold text-[var(--red-dark)]">Opció</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+

@@ -1,0 +1,18 @@
+---
+interface Props {
+  number: string;
+  title: string;
+  body: string;
+}
+
+const { number, title, body } = Astro.props;
+---
+
+<article class="panel p-5">
+  <p class="mb-4 inline-grid h-9 w-9 place-items-center rounded-md bg-[var(--red)] font-black text-white">
+    {number}
+  </p>
+  <h3 class="text-xl font-black">{title}</h3>
+  <p class="mt-2 leading-7 text-[var(--muted)]">{body}</p>
+</article>
+
