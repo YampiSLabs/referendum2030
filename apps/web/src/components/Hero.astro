@@ -1,51 +1,70 @@
 ---
-import { Vote, BarChart3 } from "lucide-react";
+import { Vote, HelpCircle } from "lucide-react";
+import Disclaimer from "./Disclaimer.astro";
 ---
 
-<section class="bg-[var(--paper)]">
-  <div class="container grid min-h-[68vh] items-center gap-10 py-14 md:grid-cols-[1.1fr_0.9fr]">
-    <div class="max-w-3xl">
-      <p class="mb-4 inline-flex rounded-md border border-[var(--line)] bg-[var(--paper-strong)] px-3 py-1 text-sm font-bold text-[var(--red-dark)]">
-        Demo cívica fictícia
-      </p>
-      <h1 class="text-4xl font-black leading-tight text-[var(--ink)] md:text-6xl">
-        Referèndum 2030
-      </h1>
-      <p class="mt-6 max-w-2xl text-lg leading-8 text-[var(--muted)]">
-        Simulador estàtic amb vot demo per token, resultats agregats i auditoria pública sense dades personals reals.
-      </p>
-      <div class="mt-8 flex flex-wrap gap-3">
-        <a class="btn" href="/votar">
-          <Vote size={20} aria-hidden="true" />
-          Començar vot demo
-        </a>
-        <a class="btn btn-secondary" href="/resultados">
-          <BarChart3 size={20} aria-hidden="true" />
-          Veure resultats
-        </a>
-      </div>
-    </div>
-    <div class="panel p-6">
-      <div class="grid gap-4">
-        <div class="border-b border-[var(--line)] pb-4">
-          <p class="text-sm font-bold uppercase text-[var(--muted)]">Pregunta demo</p>
-          <p class="mt-2 text-2xl font-black">
-            Vols que Catalunya iniciï un procés constituent digital l’any 2030?
+<section class="relative pt-12 pb-16 md:pt-20 md:pb-24 overflow-hidden">
+  <!-- Glowing ambient light background decorations -->
+  <div class="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-brand-gold/10 blur-3xl -z-10 animate-pulse-glow" aria-hidden="true"></div>
+  <div class="absolute top-20 right-0 w-80 h-80 rounded-full bg-brand-red/5 blur-3xl -z-10" aria-hidden="true"></div>
+
+  <div class="container">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+
+      <!-- Hero Left Content -->
+      <div class="lg:col-span-6 flex flex-col gap-6">
+        <div class="flex flex-col">
+          <h1 class="font-outfit text-gray-900 font-extrabold text-[52px] md:text-[68px] tracking-tight leading-[1.05]">
+            Referèndum
+          </h1>
+          <h1 class="font-outfit text-brand-red font-extrabold text-[52px] md:text-[68px] tracking-tight leading-[1.05] mt-1">
+            2030
+          </h1>
+        </div>
+
+        <div class="flex flex-col gap-4 mt-2 max-w-xl">
+          <p class="text-gray-600 text-lg md:text-xl leading-relaxed font-semibold">
+            Simulador cívic digital d'un referèndum fictici sobre el futur polític de Catalunya.
+          </p>
+          <p class="text-gray-900 text-lg md:text-xl font-extrabold leading-normal tracking-wide">
+            Participa. Informa't. Decideix.
           </p>
         </div>
-        <div class="grid gap-3">
-          <div class="flex items-center justify-between rounded-md border border-[var(--line)] bg-white p-3">
-            <span>Sí</span><span class="font-bold text-[var(--red-dark)]">Opció</span>
-          </div>
-          <div class="flex items-center justify-between rounded-md border border-[var(--line)] bg-white p-3">
-            <span>No</span><span class="font-bold text-[var(--red-dark)]">Opció</span>
-          </div>
-          <div class="flex items-center justify-between rounded-md border border-[var(--line)] bg-white p-3">
-            <span>En blanc</span><span class="font-bold text-[var(--red-dark)]">Opció</span>
-          </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap gap-4 mt-4">
+          <a class="btn min-w-[170px]" href="/votar">
+            <Vote size={18} aria-hidden="true" />
+            Vota Ara
+          </a>
+          <a class="btn btn-secondary min-w-[170px]" href="#com-funciona">
+            <HelpCircle size={18} aria-hidden="true" />
+            Com funciona
+          </a>
+        </div>
+
+        <!-- Inline Fictional Disclaimer -->
+        <div class="mt-4">
+          <Disclaimer className="border-brand-gold/50 max-w-lg" />
         </div>
       </div>
+
+      <!-- Hero Right Graphic Asset -->
+      <div class="lg:col-span-6 flex justify-center lg:justify-end relative">
+        <!-- Floating decorative circles -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[460px] h-[460px] border border-line/35 rounded-full -z-10 pointer-events-none" aria-hidden="true"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] h-[340px] border border-brand-gold/15 rounded-full -z-10 pointer-events-none" aria-hidden="true"></div>
+
+        <img
+          src="/hero-ballot.png"
+          alt="Urna de simulació de Referèndum 2030 sobre el fons del mapa de Catalunya amb pinzellades de color vermell i groc."
+          class="max-w-full h-auto object-contain hover:scale-[1.02] transition-transform duration-500 drop-shadow-md"
+          width="500"
+          height="450"
+          loading="eager"
+        />
+      </div>
+
     </div>
   </div>
 </section>
-

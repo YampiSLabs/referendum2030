@@ -1,24 +1,5 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
-import Hero from "../components/Hero.astro";
-import StatusCard from "../components/StatusCard.astro";
-import StepCard from "../components/StepCard.astro";
+import HomePage from "../components/pages/HomePage.astro";
 ---
 
-<BaseLayout title="Referèndum 2030">
-  <Hero />
-  <section class="container grid gap-4 py-10 md:grid-cols-3">
-    <StatusCard label="Frontend" value="GitHub Pages" detail="Astro estàtic, sense SSR ni endpoints." />
-    <StatusCard label="Backend" value="PythonAnywhere" detail="Django Ninja concentra tota la lògica viva." />
-    <StatusCard label="Dades" value="Agregades" detail="Sense DNI, emails ni identitat política real." />
-  </section>
-  <section class="container py-10">
-    <h2 class="text-3xl font-black">Flux demo</h2>
-    <div class="mt-6 grid gap-4 md:grid-cols-3">
-      <StepCard number="1" title="Genera token" body="La API retorna un token demo una vegada i només desa el hash." />
-      <StepCard number="2" title="Vota" body="El token pot registrar un únic vot en el referendum fictici." />
-      <StepCard number="3" title="Consulta" body="Els resultats mostren totals agregats i auditoria pública." />
-    </div>
-  </section>
-</BaseLayout>
-
+<HomePage lang="ca" />

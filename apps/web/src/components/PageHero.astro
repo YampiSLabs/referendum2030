@@ -1,0 +1,38 @@
+---
+import Disclaimer from "./Disclaimer.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+  showDisclaimer?: boolean;
+}
+
+const { 
+  title, 
+  description = "", 
+  showDisclaimer = false 
+} = Astro.props;
+---
+
+<section class="container pt-12 pb-8 md:pt-16 md:pb-10">
+  <div class="max-w-3xl flex flex-col gap-4">
+    <!-- Big Bold Institutional Title -->
+    <h1 class="font-outfit text-gray-900 font-extrabold text-[44px] md:text-[54px] tracking-tight leading-none">
+      {title}
+    </h1>
+    
+    <!-- Subtitle description -->
+    {description && (
+      <p class="text-gray-600 text-base md:text-lg leading-relaxed font-semibold max-w-2xl">
+        {description}
+      </p>
+    )}
+    
+    <!-- Small disclaimer alert band under subtitle if requested -->
+    {showDisclaimer && (
+      <div class="mt-2 max-w-2xl">
+        <Disclaimer className="border-brand-gold/40 py-3.5 px-4 bg-brand-gold-soft/60" />
+      </div>
+    )}
+  </div>
+</section>

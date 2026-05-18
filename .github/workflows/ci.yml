@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/api
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - run: uv sync
+      - run: uv run ruff check .
+      - run: uv run pytest
+
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.30.3
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile=false
+      - run: pnpm --filter web build
+        env:
+          PUBLIC_API_BASE_URL: ${{ vars.PUBLIC_API_BASE_URL }}
+          PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}

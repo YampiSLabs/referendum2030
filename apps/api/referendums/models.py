@@ -1,4 +1,5 @@
 from django.db import models
+from simple_history.models import HistoricalRecords
 
 
 class Referendum(models.Model):
@@ -10,6 +11,7 @@ class Referendum(models.Model):
     ends_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    history = HistoricalRecords()
 
     class Meta:
         ordering = ["-created_at"]
@@ -22,6 +24,7 @@ class Question(models.Model):
     referendum = models.ForeignKey(Referendum, related_name="questions", on_delete=models.CASCADE)
     text = models.TextField()
     order = models.PositiveIntegerField(default=1)
+    history = HistoricalRecords()
 
     class Meta:
         ordering = ["order", "id"]
@@ -34,6 +37,7 @@ class Option(models.Model):
     question = models.ForeignKey(Question, related_name="options", on_delete=models.CASCADE)
     label = models.CharField(max_length=80)
     order = models.PositiveIntegerField(default=1)
+    history = HistoricalRecords()
 
     class Meta:
         ordering = ["order", "id"]
@@ -41,4 +45,3 @@ class Option(models.Model):
 
     def __str__(self) -> str:
         return self.label
-

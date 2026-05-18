@@ -5,3 +5,5 @@ class VotesConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "votes"
 
+    def ready(self) -> None:
+        import votes.signals  # noqa: F401

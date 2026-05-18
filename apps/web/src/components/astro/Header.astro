@@ -1,0 +1,186 @@
+---
+import { getRoute, getPageKeyFromPath } from "../../shared/lib/routes";
+import { useTranslations } from "../../shared/i18n/translations";
+import type { Locale } from "../../shared/i18n/translations";
+
+interface Props {
+  activePath: string;
+  lang?: Locale;
+}
+
+const { activePath, lang = "ca" } = Astro.props;
+const t = useTranslations(lang);
+const pageKey = getPageKeyFromPath(activePath);
+
+const navItems = [
+  { href: getRoute("home", lang), label: t("nav.home") },
+  { href: `${getRoute("home", lang)}#com-funciona`, label: t("nav.howItWorks") },
+  { href: getRoute("votar", lang), label: t("nav.vote") },
+  { href: getRoute("resultats", lang), label: t("nav.results") },
+  { href: getRoute("transparencia", lang), label: t("nav.transparency") },
+  { href: getRoute("faq", lang), label: t("nav.faq") }
+];
+
+const isActive = (href: string) => {
+  if (href === "/" || href === "/es/" || href === "/en/" || href === "/fr/" || href === "/ar/" || href === "/zh/") {
+    return activePath === href || activePath === href.slice(0, -1) || (href === "/" && (activePath === "" || activePath === "/"));
+  }
+  if (href.includes("#")) {
+    return false;
+  }
+  return activePath.startsWith(href);
+};
+
+const languages = [
+  { code: "ca", label: "Català", short: "CA", flag: "/flags/ES.svg" },
+  { code: "es", label: "Español", short: "ES", flag: "/flags/ES.svg" },
+  { code: "en", label: "English", short: "EN", flag: "/flags/GB.svg" },
+  { code: "fr", label: "Français", short: "FR", flag: "/flags/FR.svg" },
+  { code: "ar", label: "العربية", short: "AR", flag: "/flags/SA.svg" },
+  { code: "zh", label: "中文", short: "ZH", flag: "/flags/CN.svg" }
+];
+
+const currentLanguageShort = languages.find(l => l.code === lang)?.short || "CA";
+
+const langRoutes = languages.map(l => ({
+  ...l,
+  href: getRoute(pageKey, l.code as Locale)
+}));
+---
+
+<header class="sticky top-0 z-50 border-b border-line bg-white/95 backdrop-blur-md transition-shadow duration-200">
+  <div class="container flex h-20 items-center justify-between">
+    <!-- Fictive circular brand logo -->
+    <a href={getRoute("home", lang)} class="flex items-center gap-3.5 group" aria-label="Anar a la pàgina d'inici">
+      <div class="relative flex h-11 w-11 items-center justify-center rounded-full bg-crema-dark border-2 border-brand-red group-hover:scale-105 transition-transform duration-200" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="2" width="2.5" height="20" rx="1.25" fill="#d20a1e" />
+          <rect x="9.5" y="2" width="2.5" height="20" rx="1.25" fill="#d20a1e" />
+          <rect x="15" y="2" width="2.5" height="20" rx="1.25" fill="#d20a1e" />
+          <rect x="20.5" y="2" width="2.5" height="20" rx="1.25" fill="#d20a1e" />
+        </svg>
+      </div>
+      <div class="flex flex-col">
+        <span class="font-outfit text-[11px] font-black tracking-[0.25em] text-ink uppercase leading-none">Referèndum</span>
+        <span class="font-outfit text-base font-black text-brand-red leading-none mt-1">2030</span>
+      </div>
+    </a>
+
+    <!-- Desktop Navigation -->
+    <nav aria-label="Navegació principal" class="hidden md:flex items-center gap-8">
+      <ul class="flex items-center gap-6">
+        {navItems.map((item) => (
+          <li class="relative">
+            <a 
+              class={`text-sm font-semibold py-2 block transition-colors duration-200 ${
+                isActive(item.href) 
+                  ? "text-brand-red font-bold" 
+                  : "text-muted hover:text-ink"
+              }`} 
+              href={item.href}
+              aria-current={isActive(item.href) ? "page" : undefined}
+            >
+              {item.label}
+            </a>
+            {isActive(item.href) && (
+              <span class="absolute bottom-[-24px] left-0 right-0 h-[3px] bg-brand-red rounded-t-full" />
+            )}
+          </li>
+        ))}
+      </ul>
+
+      <!-- Elegant CSS-based language selector dropdown -->
+      <details class="relative group pl-4 border-l border-line transition-all">
+        <summary 
+          class="flex items-center gap-1.5 text-xs font-bold text-ink hover:text-brand-red cursor-pointer transition-colors duration-150 bg-transparent border-0 list-none [&::-webkit-details-marker]:hidden"
+          aria-label={t("lang.current")}
+        >
+          <span>{currentLanguageShort}</span>
+          <svg class="w-3.5 h-3.5 text-muted group-hover:text-brand-red transition-transform duration-150 group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
+          </svg>
+        </summary>
+        
+        <!-- Dropdown List -->
+        <ul 
+          class="absolute right-0 top-full mt-2 w-36 rounded-xl border border-line bg-white p-1.5 shadow-lg animate-fade-in z-50 list-none m-0 hidden group-open:block"
+          role="listbox"
+        >
+          {langRoutes.map((l) => (
+            <li role="option" aria-selected={l.code === lang ? "true" : "false"}>
+              <a 
+                href={l.href}
+                class={`flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-bold transition-all ${
+                  l.code === lang 
+                    ? "bg-brand-red/5 text-brand-red" 
+                    : "text-muted hover:bg-crema-dark hover:text-ink"
+                }`}
+              >
+                <img src={l.flag} alt="" class="w-4 h-3 rounded-sm" />
+                <span class="flex-grow">{l.label}</span>
+                <span class="text-[9px] opacity-60 font-black">{l.short}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </details>
+    </nav>
+
+    <!-- Mobile Navigation Toggle Menu -->
+    <div class="md:hidden flex items-center gap-3">
+      <div class="flex items-center gap-1 text-xs font-bold text-ink pr-3 border-r border-line">
+        <span>{currentLanguageShort}</span>
+      </div>
+      <label for="mobile-menu-toggle" class="cursor-pointer p-2 rounded-md hover:bg-crema-dark transition-colors" aria-label="Obrir menú de navegació">
+        <svg class="w-6 h-6 text-ink" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path>
+        </svg>
+      </label>
+    </div>
+  </div>
+
+  <!-- Hidden mobile menu trigger checkbox -->
+  <input type="checkbox" id="mobile-menu-toggle" class="peer hidden" />
+
+  <!-- Mobile Drawer Menu -->
+  <div class="peer-checked:block hidden md:hidden border-t border-line bg-white animate-fade-in">
+    <nav class="container py-4">
+      <ul class="flex flex-col gap-3">
+        {navItems.map((item) => (
+          <li>
+            <a 
+              class={`text-sm font-semibold p-2.5 rounded-lg block transition-colors ${
+                isActive(item.href) 
+                  ? "bg-brand-red/5 text-brand-red font-bold" 
+                  : "text-muted hover:bg-crema-dark hover:text-ink"
+              }`} 
+              href={item.href}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+
+      <!-- Mobile language selectors row -->
+      <div class="border-t border-line/65 pt-4 mt-3 flex flex-col gap-2">
+        <span class="text-[10px] font-black text-muted uppercase tracking-wider pl-1.5">{t("lang.current")}</span>
+        <div class="grid grid-cols-3 gap-2">
+          {langRoutes.map((l) => (
+            <a 
+              href={l.href}
+              class={`flex items-center justify-center gap-2 py-2.5 rounded-lg text-xs font-bold transition-all border ${
+                l.code === lang 
+                  ? "border-brand-red bg-brand-red/5 text-brand-red" 
+                  : "border-line/45 text-muted hover:bg-crema-dark hover:text-ink"
+              }`}
+            >
+              <img src={l.flag} alt="" class="w-4 h-3 rounded-sm" />
+              <span>{l.label}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>

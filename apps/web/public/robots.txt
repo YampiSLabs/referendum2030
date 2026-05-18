@@ -1,0 +1,12 @@
+# Referèndum 2030 – robots.txt
+# https://referundum2030.cat
+
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://referundum2030.cat/sitemap-index.xml
+
+# Disallow private API paths if crawled directly
+Disallow: /api/
+Disallow: /_astro/

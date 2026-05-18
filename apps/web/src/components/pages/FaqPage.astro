@@ -1,0 +1,113 @@
+---
+import PageShell from "../astro/PageShell.astro";
+import PageHero from "../astro/PageHero.astro";
+import FaqAccordion from "../astro/FaqAccordion.astro";
+import { getCollection } from "astro:content";
+import { useTranslations } from "../../shared/i18n/translations";
+import type { Locale } from "../../shared/i18n/translations";
+
+interface Props {
+  lang?: Locale;
+}
+
+const { lang = "ca" } = Astro.props;
+const t = useTranslations(lang);
+
+// Load faq collections dynamically, filtering by active language prefix
+const faqEntries = await getCollection("faq");
+const filteredFaqs = faqEntries.filter((item) => item.id.startsWith(`${lang}/`));
+const sortedFaqs = filteredFaqs.sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
+
+const categories = [
+  { id: "projecte", name: t("faq.cat.projecte"), count: sortedFaqs.filter(f => f.data.category === "projecte").length },
+  { id: "votacio", name: t("faq.cat.votacio"), count: sortedFaqs.filter(f => f.data.category === "votacio").length },
+  { id: "privacitat", name: t("faq.cat.privacitat"), count: sortedFaqs.filter(f => f.data.category === "privacitat").length },
+].filter(c => c.count > 0);
+---
+
+<PageShell lang={lang} title={t("meta.faq.title")} description={t("meta.faq.description")}>
+  
+  <!-- Header Page Row -->
+  <PageHero 
+    title={t("faq.hero.title")} 
+    description={t("faq.hero.description")}
+    showDisclaimer={true}
+    lang={lang}
+  />
+
+  <!-- Main Accordion Grid Layout -->
+  <section class="container pb-16">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Left Category Index Column (4 cols) -->
+      <aside class="lg:col-span-4 flex flex-col gap-6 sticky top-24">
+        <article class="panel p-6 bg-gradient-to-br from-white to-crema-dark/25">
+          <div class="flex items-center gap-3.5 mb-4">
+            <div class="p-2 bg-brand-red/5 rounded-xl text-brand-red" aria-hidden="true">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"></path>
+              </svg>
+            </div>
+            <h3 class="font-outfit text-sm font-black text-gray-900">{t("faq.aside.title")}</h3>
+          </div>
+          
+          <p class="text-xs text-muted leading-relaxed font-semibold mb-4.5">
+            {t("faq.aside.body")}
+          </p>
+
+          <!-- Category anchor checklist -->
+          <nav aria-label={t("faq.aside.title")}>
+            <ul class="flex flex-col gap-2.5">
+              {categories.map((cat) => (
+                <li>
+                  <a 
+                    href={`#cat-${cat.id}`} 
+                    class="flex items-center justify-between py-2 px-3 rounded-lg text-xs font-bold text-gray-700 hover:bg-brand-red/5 hover:text-brand-red transition-all duration-150"
+                  >
+                    <span>{cat.name}</span>
+                    <span class="py-0.5 px-2 bg-crema-dark rounded-full text-[10px] text-muted font-bold border border-line/45">
+                      {cat.count}
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </article>
+      </aside>
+
+      <!-- Right Accordions Feed Column (8 cols) -->
+      <div class="lg:col-span-8 flex flex-col gap-10">
+        
+        {categories.map((cat) => {
+          // Filter items belonging to this category
+          const categoryItems = sortedFaqs.filter(item => item.data.category === cat.id);
+          
+          return (
+            <section id={`cat-${cat.id}`} class="scroll-mt-24 flex flex-col gap-4">
+              <div class="flex items-center gap-3 border-b border-line pb-3.5 mb-2 relative">
+                <h2 class="font-outfit text-lg font-black text-gray-900">{cat.name}</h2>
+                <span class="absolute bottom-0 left-0 w-8 h-[2.5px] bg-brand-red rounded-full"></span>
+              </div>
+              
+              <div class="flex flex-col gap-3.5">
+                {categoryItems.map((item, index) => {
+                  return (
+                    <FaqAccordion 
+                      question={item.data.question} 
+                      answer={item.body}
+                      defaultOpen={cat.id === "projecte" && index === 0}
+                    />
+                  );
+                })}
+              </div>
+            </section>
+          );
+        })}
+
+      </div>
+
+    </div>
+  </section>
+
+</PageShell>

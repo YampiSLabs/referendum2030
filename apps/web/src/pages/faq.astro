@@ -1,22 +1,5 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
+import FaqPage from "../components/pages/FaqPage.astro";
 ---
 
-<BaseLayout title="FAQ | Referèndum 2030" description="Preguntes freqüents del simulador fictici.">
-  <section class="container grid gap-6 py-12">
-    <h1 class="text-4xl font-black">FAQ</h1>
-    <article class="panel p-5">
-      <h2 class="text-xl font-black">Té validesa legal?</h2>
-      <p class="mt-2 text-[var(--muted)]">No. És una simulació fictícia sense vinculació institucional.</p>
-    </article>
-    <article class="panel p-5">
-      <h2 class="text-xl font-black">Puc introduir dades personals?</h2>
-      <p class="mt-2 text-[var(--muted)]">No. El demo no necessita DNI, correu electrònic, nom ni identitat política real.</p>
-    </article>
-    <article class="panel p-5">
-      <h2 class="text-xl font-black">Com es calcula el resultat?</h2>
-      <p class="mt-2 text-[var(--muted)]">La API suma vots demo per opció i retorna només totals agregats.</p>
-    </article>
-  </section>
-</BaseLayout>
-
+<FaqPage lang="ca" />

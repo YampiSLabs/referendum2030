@@ -1,0 +1,89 @@
+name: Deploy backend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/api/**"
+      - "deploy/backend.compose.yml"
+      - ".github/workflows/deploy-backend.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-backend
+  cancel-in-progress: false
+
+jobs:
+  test-and-deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: astral-sh/setup-uv@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Verify backend
+        working-directory: apps/api
+        run: |
+          uv sync
+          uv run ruff check .
+          uv run pytest
+
+      - name: Configure SSH
+        run: |
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "${{ secrets.DOKPLOY_SSH_PRIVATE_KEY }}" > ~/.ssh/dokploy
+          chmod 600 ~/.ssh/dokploy
+          ssh-keyscan -p "${{ secrets.DOKPLOY_SSH_PORT }}" "${{ secrets.DOKPLOY_SSH_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Upload release
+        run: |
+          stamp="$(date -u +%Y%m%dT%H%M%SZ)"
+          archive="/tmp/referendum-2030-${stamp}.tar.gz"
+          remote_archive="/tmp/referendum-2030-${stamp}.tar.gz"
+          release="/opt/referendum-2030/releases/${stamp}"
+
+          tar \
+            --exclude='.git' \
+            --exclude='node_modules' \
+            --exclude='.pnpm-store' \
+            --exclude='.playwright-cli' \
+            --exclude='output' \
+            --exclude='apps/api/.venv' \
+            --exclude='apps/api/__pycache__' \
+            --exclude='apps/api/.pytest_cache' \
+            --exclude='apps/api/.ruff_cache' \
+            --exclude='apps/api/db.sqlite3' \
+            --exclude='apps/api/staticfiles' \
+            --exclude='apps/api/.env' \
+            --exclude='apps/api/.env.*' \
+            -czf "$archive" apps/api deploy/backend.compose.yml
+
+          scp -i ~/.ssh/dokploy -P "${{ secrets.DOKPLOY_SSH_PORT }}" "$archive" "${{ secrets.DOKPLOY_SSH_USER }}@${{ secrets.DOKPLOY_SSH_HOST }}:${remote_archive}"
+          ssh -i ~/.ssh/dokploy -p "${{ secrets.DOKPLOY_SSH_PORT }}" "${{ secrets.DOKPLOY_SSH_USER }}@${{ secrets.DOKPLOY_SSH_HOST }}" \
+            "set -euo pipefail; mkdir -p '$release'; tar -xzf '$remote_archive' -C '$release'; cp '$release/deploy/backend.compose.yml' '$release/compose.deploy.yml'; ln -sfn '$release' /opt/referendum-2030/current; rm -f '$remote_archive'"
+
+      - name: Start backend
+        run: |
+          ssh -i ~/.ssh/dokploy -p "${{ secrets.DOKPLOY_SSH_PORT }}" "${{ secrets.DOKPLOY_SSH_USER }}@${{ secrets.DOKPLOY_SSH_HOST }}" \
+            "set -euo pipefail; cd /opt/referendum-2030/current; docker compose -p referendum-2030 -f compose.deploy.yml up -d --build"
+
+      - name: Verify deployment
+        run: |
+          for i in {1..24}; do
+            status="$(ssh -i ~/.ssh/dokploy -p "${{ secrets.DOKPLOY_SSH_PORT }}" "${{ secrets.DOKPLOY_SSH_USER }}@${{ secrets.DOKPLOY_SSH_HOST }}" "docker inspect -f '{{if .State.Health}}{{.State.Health.Status}}{{else}}{{.State.Status}}{{end}}' referendum-2030-api 2>/dev/null || true")"
+            echo "health=${status}"
+            [ "$status" = "healthy" ] && break
+            if [ "$status" = "unhealthy" ]; then
+              ssh -i ~/.ssh/dokploy -p "${{ secrets.DOKPLOY_SSH_PORT }}" "${{ secrets.DOKPLOY_SSH_USER }}@${{ secrets.DOKPLOY_SSH_HOST }}" "docker logs --tail 160 referendum-2030-api"
+              exit 1
+            fi
+            sleep 5
+          done
+
+          curl --fail --silent --show-error https://referendum.yampi.eu/api/v1/healthz/

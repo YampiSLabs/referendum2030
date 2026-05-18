@@ -1,0 +1,83 @@
+---
+import Disclaimer from "./Disclaimer.astro";
+import { getRoute } from "../../shared/lib/routes";
+import { useTranslations } from "../../shared/i18n/translations";
+import type { Locale } from "../../shared/i18n/translations";
+
+interface Props {
+  lang?: Locale;
+}
+
+const { lang = "ca" } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class="relative pt-12 pb-16 md:pt-20 md:pb-24 overflow-hidden animate-fade-in">
+  <!-- Glowing ambient light background decorations -->
+  <div class="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-brand-gold/10 blur-3xl -z-10 animate-pulse-glow" aria-hidden="true"></div>
+  <div class="absolute top-20 right-0 w-80 h-80 rounded-full bg-brand-red/5 blur-3xl -z-10" aria-hidden="true"></div>
+
+  <div class="container">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+      
+      <!-- Hero Left Content -->
+      <div class="lg:col-span-6 flex flex-col gap-6">
+        <div class="flex flex-col">
+          <h1 class="font-outfit text-gray-900 font-extrabold text-[52px] md:text-[68px] tracking-tight leading-[1.05]">
+            {t("hero.title1")}
+          </h1>
+          <h1 class="font-outfit text-brand-red font-extrabold text-[52px] md:text-[68px] tracking-tight leading-[1.05] mt-1">
+            {t("hero.title2")}
+          </h1>
+        </div>
+
+        <div class="flex flex-col gap-4 mt-2 max-w-xl">
+          <p class="text-gray-600 text-lg md:text-xl leading-relaxed font-semibold">
+            {t("hero.subtitle")}
+          </p>
+          <p class="text-gray-900 text-lg md:text-xl font-extrabold leading-normal tracking-wide">
+            {t("hero.cta")}
+          </p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap gap-4 mt-4">
+          <a class="btn min-w-[170px]" href={getRoute("votar", lang)}>
+            <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            {t("hero.btnVote")}
+          </a>
+          <a class="btn btn-secondary min-w-[170px]" href={`${getRoute("home", lang)}#com-funciona`}>
+            <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"></path>
+            </svg>
+            {t("hero.btnHow")}
+          </a>
+        </div>
+
+        <!-- Inline Fictional Disclaimer -->
+        <div class="mt-4">
+          <Disclaimer lang={lang} className="border-brand-gold/50 max-w-lg" />
+        </div>
+      </div>
+
+      <!-- Hero Right Graphic Asset -->
+      <div class="lg:col-span-6 flex justify-center lg:justify-end relative">
+        <!-- Floating decorative circles -->
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[460px] h-[460px] border border-line/35 rounded-full -z-10 pointer-events-none" aria-hidden="true"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] h-[340px] border border-brand-gold/15 rounded-full -z-10 pointer-events-none" aria-hidden="true"></div>
+        
+        <img 
+          src="/hero-ballot.png" 
+          alt={t("hero.imgAlt")} 
+          class="max-w-full h-auto object-contain hover:scale-[1.02] transition-transform duration-500 drop-shadow-md"
+          width="500" 
+          height="450" 
+          loading="eager"
+        />
+      </div>
+      
+    </div>
+  </div>
+</section>

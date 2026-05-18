@@ -1,0 +1,15 @@
+---
+interface Props {
+  label: string;
+  value: string;
+  detail: string;
+}
+
+const { label, value, detail } = Astro.props;
+---
+
+<article class="panel p-5">
+  <span class="text-[10px] font-black uppercase text-muted tracking-wider">{label}</span>
+  <p class="mt-1 text-2xl font-black text-ink font-outfit">{value}</p>
+  <p class="mt-1 text-xs leading-relaxed font-semibold text-muted">{detail}</p>
+</article>

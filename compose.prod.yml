@@ -1,0 +1,48 @@
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-referendum2030}
+      POSTGRES_USER: ${POSTGRES_USER:-referendum2030}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env.prod}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-referendum2030} -d ${POSTGRES_DB:-referendum2030}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: ./apps/api
+    restart: unless-stopped
+    environment:
+      DJANGO_SETTINGS_MODULE: referendum2030.settings.production
+      SECRET_KEY: ${SECRET_KEY:?Set SECRET_KEY in .env.prod}
+      DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:?Set DJANGO_ALLOWED_HOSTS in .env.prod}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-}
+      CSRF_TRUSTED_ORIGINS: ${CSRF_TRUSTED_ORIGINS:-}
+      DATABASE_URL: ${DATABASE_URL:-postgres://referendum2030:${POSTGRES_PASSWORD}@db:5432/referendum2030}
+      SECURE_SSL_REDIRECT: ${SECURE_SSL_REDIRECT:-False}
+      SESSION_COOKIE_SECURE: ${SESSION_COOKIE_SECURE:-True}
+      CSRF_COOKIE_SECURE: ${CSRF_COOKIE_SECURE:-True}
+      SECURE_HSTS_SECONDS: ${SECURE_HSTS_SECONDS:-0}
+      SECURE_HSTS_INCLUDE_SUBDOMAINS: ${SECURE_HSTS_INCLUDE_SUBDOMAINS:-False}
+      SECURE_HSTS_PRELOAD: ${SECURE_HSTS_PRELOAD:-False}
+      DEMO_ADMIN_USERNAME: ${DEMO_ADMIN_USERNAME:-admin}
+      DEMO_ADMIN_PASSWORD: ${DEMO_ADMIN_PASSWORD:-admin}
+      DEMO_ADMIN_EMAIL: ${DEMO_ADMIN_EMAIL:-admin@example.test}
+    command: >
+      sh -c "uv run python manage.py migrate &&
+             uv run python manage.py collectstatic --noinput &&
+             uv run gunicorn referendum2030.wsgi:application --bind 0.0.0.0:8000 --workers 3 --timeout 60"
+    ports:
+      - "${API_PORT:-8000}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:

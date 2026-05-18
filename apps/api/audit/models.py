@@ -1,4 +1,5 @@
 from django.db import models
+from simple_history.models import HistoricalRecords
 
 
 class AuditEvent(models.Model):
@@ -23,10 +24,10 @@ class AuditEvent(models.Model):
     public_message = models.CharField(max_length=240)
     metadata = models.JSONField(default=dict, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    history = HistoricalRecords()
 
     class Meta:
         ordering = ["-created_at"]
 
     def __str__(self) -> str:
         return f"{self.event_type}:{self.referendum.slug}"
-

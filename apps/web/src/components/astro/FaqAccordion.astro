@@ -1,0 +1,41 @@
+---
+interface Props {
+  question: string;
+  answer: string;
+  defaultOpen?: boolean;
+}
+
+const { question, answer, defaultOpen = false } = Astro.props;
+---
+
+<details 
+  class="group border border-line rounded-xl bg-white overflow-hidden transition-all duration-200 hover:border-brand-gold/60 shadow-sm"
+  open={defaultOpen ? true : undefined}
+>
+  <summary class="flex items-center justify-between gap-4 p-5 font-outfit text-xs font-black text-ink hover:text-brand-red cursor-pointer list-none select-none transition-colors focus-visible:bg-crema-dark focus:outline-none">
+    <span>{question}</span>
+    
+    <!-- Custom Chevron SVG Indicator -->
+    <div class="flex-shrink-0 p-1.5 bg-crema-dark rounded-lg text-muted group-hover:text-brand-red group-open:bg-brand-red/5 group-open:text-brand-red transition-all duration-200" aria-hidden="true">
+      <svg class="w-4 h-4 transform transition-transform duration-300 group-open:rotate-180" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
+      </svg>
+    </div>
+  </summary>
+
+  <div class="border-t border-line/60 bg-crema/25 px-5 py-4.5 text-xs text-muted leading-relaxed font-semibold transition-all duration-300">
+    <p class="whitespace-pre-line">
+      {answer}
+    </p>
+  </div>
+</details>
+
+<style>
+  /* Remove default browser disclosure marker triangles */
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary {
+    list-style: none;
+  }
+</style>

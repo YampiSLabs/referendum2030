@@ -1,67 +1,133 @@
 ---
 import "../styles/global.css";
-import Disclaimer from "../components/Disclaimer.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
 
 interface Props {
   title: string;
   description?: string;
+  ogImage?: string;
+  ogType?: "website" | "article";
+  keywords?: string;
+  noindex?: boolean;
 }
 
 const {
   title,
-  description = "Simulació cívica fictícia del Referèndum 2030.",
+  description = "Simulació cívica digital del Referèndum 2030, un referèndum fictici sobre el futur polític de Catalunya. Participa, vota i segueix els resultats en temps real.",
+  ogImage = "/og-image.png",
+  ogType = "website",
+  keywords = "referèndum, Catalunya, 2030, democràcia, vot, independència, simulació cívica, participació ciutadana",
+  noindex = false,
 } = Astro.props;
 
-const nav = [
-  { href: "/", label: "Inici" },
-  { href: "/votar", label: "Votar" },
-  { href: "/resultados", label: "Resultats" },
-  { href: "/transparencia", label: "Transparència" },
-  { href: "/faq", label: "FAQ" },
-];
+const activePath = Astro.url.pathname;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = new URL(ogImage, Astro.site);
+
+// JSON-LD Structured Data
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "Referèndum 2030",
+  description,
+  url: Astro.site?.toString(),
+  inLanguage: ["ca", "es", "en", "fr", "ar", "zh"],
+  publisher: {
+    "@type": "Organization",
+    name: "Referèndum 2030",
+    url: Astro.site?.toString(),
+    logo: {
+      "@type": "ImageObject",
+      url: new URL("/favicon.svg", Astro.site).toString(),
+    },
+  },
+};
 ---
 
 <!doctype html>
-<html lang="ca">
+<html lang="ca" class="bg-crema text-ink scroll-smooth">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
+    <meta name="author" content="Referèndum 2030" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Robots -->
+    {noindex ? (
+      <meta name="robots" content="noindex, nofollow" />
+    ) : (
+      <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    )}
+
+    <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${title} – Referèndum 2030`} />
+    <meta property="og:site_name" content="Referèndum 2030" />
+    <meta property="og:locale" content="ca_ES" />
+    <meta property="og:locale:alternate" content="es_ES" />
+    <meta property="og:locale:alternate" content="en_US" />
+
+    <!-- Twitter / X Cards -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+    <meta name="twitter:image:alt" content={`${title} – Referèndum 2030`} />
+
+    <!-- Icons -->
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#8B1C2B" />
+    <meta name="msapplication-TileColor" content="#8B1C2B" />
+
+    <!-- Sitemap -->
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <!-- Fonts: Outfit + Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+
     <title>{title}</title>
   </head>
-  <body>
-    <a class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:bg-white focus:p-3" href="#contingut">
+  <body class="bg-crema min-h-screen flex flex-col justify-between antialiased">
+    <!-- Accessible Skip Link -->
+    <a
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-white focus:text-brand-red focus:border-2 focus:border-brand-red focus:p-4 focus:rounded-xl focus:shadow-lg focus:font-bold"
+      href="#contingut"
+    >
       Salta al contingut
     </a>
-    <header class="border-b border-[var(--line)] bg-[var(--paper-strong)]">
-      <div class="container flex flex-col gap-4 py-4 md:flex-row md:items-center md:justify-between">
-        <a href="/" class="text-xl font-black tracking-normal text-[var(--red-dark)]">Referèndum 2030</a>
-        <nav aria-label="Navegació principal">
-          <ul class="flex flex-wrap gap-2">
-            {nav.map((item) => (
-              <li>
-                <a class="rounded-md px-3 py-2 font-semibold hover:bg-[#efe3ca]" href={item.href}>
-                  {item.label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </div>
-    </header>
-    <Disclaimer />
-    <main id="contingut">
+
+    <!-- Sticky Main Navigation Header -->
+    <Header activePath={activePath} />
+
+    <!-- Main Content Slot -->
+    <main id="contingut" class="flex-grow focus:outline-none" tabindex="-1">
       <slot />
     </main>
-    <footer class="mt-16 border-t border-[var(--line)] bg-[var(--paper-strong)]">
-      <div class="container grid gap-3 py-8 text-sm text-[var(--muted)] md:grid-cols-[1fr_auto] md:items-center">
-        <p>Referèndum 2030. Demo cívica fictícia per a portfolio.</p>
-        <p>No recull dades personals reals.</p>
-      </div>
-    </footer>
+
+    <!-- Institutional Footer -->
+    <Footer />
   </body>
 </html>

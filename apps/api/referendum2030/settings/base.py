@@ -17,6 +17,9 @@ DEBUG = env("DEBUG")
 ALLOWED_HOSTS = env("DJANGO_ALLOWED_HOSTS")
 
 INSTALLED_APPS = [
+    "unfold",
+    "unfold.contrib.import_export",
+    "unfold.contrib.simple_history",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -24,6 +27,13 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "corsheaders",
+    "rest_framework",
+    "drf_spectacular",
+    "constance",
+    "constance.backends.database",
+    "import_export",
+    "simple_history",
+    "core",
     "referendums",
     "votes",
     "audit",
@@ -38,8 +48,10 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "simple_history.middleware.HistoryRequestMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "core.middleware.DemoProjectHeaderMiddleware",
 ]
 
 ROOT_URLCONF = "referendum2030.urls"
@@ -92,3 +104,43 @@ CSRF_TRUSTED_ORIGINS = env("CSRF_TRUSTED_ORIGINS")
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
+REST_FRAMEWORK = {
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_PAGINATION_CLASS": "core.pagination.DefaultPageNumberPagination",
+    "DEFAULT_THROTTLE_RATES": {
+        "anon": "120/minute",
+        "demo_token": "20/hour",
+        "demo_vote": "60/hour",
+    },
+    "EXCEPTION_HANDLER": "core.exceptions.api_exception_handler",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Referendum 2030 API",
+    "DESCRIPTION": (
+        "Fictitious referendum simulation API for portfolio and learning. "
+        "No legal validity, no official electoral use."
+    ),
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+}
+
+CONSTANCE_BACKEND = "constance.backends.database.DatabaseBackend"
+CONSTANCE_CONFIG = {
+    "DEMO_VOTING_ENABLED": (
+        True,
+        "Allow demo token issuance and demo voting endpoints.",
+        bool,
+    ),
+    "PUBLIC_RESULTS_ENABLED": (
+        True,
+        "Allow public aggregate results endpoint.",
+        bool,
+    ),
+}
+
+UNFOLD = {
+    "SITE_TITLE": "Referendum 2030",
+    "SITE_HEADER": "Referendum 2030 Admin",
+    "SITE_SUBHEADER": "Fictitious demo backend",
+}

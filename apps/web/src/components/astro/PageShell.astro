@@ -1,0 +1,84 @@
+---
+import "../../shared/styles/global.css";
+import Header from "./Header.astro";
+import Footer from "./Footer.astro";
+import { SEO_DEFAULTS } from "../../shared/lib/seo";
+import { getPageKeyFromPath, getRoute } from "../../shared/lib/routes";
+import { useTranslations } from "../../shared/i18n/translations";
+import type { Locale } from "../../shared/i18n/translations";
+
+interface Props {
+  title: string;
+  description?: string;
+  lang?: Locale;
+}
+
+const {
+  title,
+  description = SEO_DEFAULTS.defaultDescription,
+  lang = "ca"
+} = Astro.props;
+
+const t = useTranslations(lang);
+const activePath = Astro.url.pathname;
+const pageKey = getPageKeyFromPath(activePath);
+
+const locales: Locale[] = ["ca", "es", "en", "fr", "ar", "zh"];
+const alternateLinks = locales.map((l) => ({
+  lang: l,
+  href: getRoute(pageKey, l)
+}));
+---
+
+<!doctype html>
+<html lang={lang} dir={lang === "ar" ? "rtl" : "ltr"} class="bg-crema text-ink scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    
+    {alternateLinks.map((alt) => (
+      <link rel="alternate" hreflang={alt.lang} href={new URL(alt.href, Astro.url.origin).toString()} />
+    ))}
+
+    
+    <!-- Open Graph Metadata -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ca_ES" />
+    
+    <!-- Icons -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    
+    <!-- Fonts Google Fonts: Outfit and Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link 
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;700;800;900&family=Inter:wght@400;500;600;700;800&display=swap" 
+      rel="stylesheet" 
+    />
+    
+    <title>{title}</title>
+  </head>
+  <body class="bg-crema min-h-screen flex flex-col justify-between antialiased">
+    <!-- Accessible Skip Link -->
+    <a 
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-white focus:text-brand-red focus:border-2 focus:border-brand-red focus:p-4 focus:rounded-xl focus:shadow-lg focus:font-bold" 
+      href="#contingut"
+    >
+      {t("nav.skip")}
+    </a>
+
+    <!-- Sticky Main Navigation Header -->
+    <Header activePath={activePath} lang={lang} />
+
+    <!-- Main Content Slot -->
+    <main id="contingut" class="flex-grow focus:outline-none" tabindex="-1">
+      <slot />
+    </main>
+
+    <!-- Institutional Footer -->
+    <Footer lang={lang} />
+  </body>
+</html>

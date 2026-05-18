@@ -1,0 +1,115 @@
+---
+interface Props {
+  activePath: string;
+}
+
+const { activePath } = Astro.props;
+
+const navItems = [
+  { href: "/", label: "Inici" },
+  { href: "/#com-funciona", label: "Com funciona" },
+  { href: "/votar", label: "Votar" },
+  { href: "/resultats", label: "Resultats" },
+  { href: "/transparencia", label: "Transparència" },
+  { href: "/faq", label: "FAQ" }
+];
+
+const isActive = (href: string) => {
+  if (href === "/") {
+    return activePath === "/" || activePath === "";
+  }
+  if (href.startsWith("/#")) {
+    return false;
+  }
+  return activePath.startsWith(href);
+};
+---
+
+<header class="sticky top-0 z-50 border-b border-line bg-white/95 backdrop-blur-md transition-shadow duration-200">
+  <div class="container flex h-20 items-center justify-between">
+    <!-- Fictive circular brand logo -->
+    <a href="/" class="flex items-center gap-3.5 group" aria-label="Anar a la pàgina d'inici de Referèndum 2030">
+      <div class="relative flex h-11 w-11 items-center justify-center rounded-full bg-crema-dark border-2 border-brand-red group-hover:scale-105 transition-transform duration-200" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="4" y="2" width="2.5" height="20" rx="1.25" fill="#d20a1e" />
+          <rect x="9.5" y="2" width="2.5" height="20" rx="1.25" fill="#d20a1e" />
+          <rect x="15" y="2" width="2.5" height="20" rx="1.25" fill="#d20a1e" />
+          <rect x="20.5" y="2" width="2.5" height="20" rx="1.25" fill="#d20a1e" />
+        </svg>
+      </div>
+      <div class="flex flex-col">
+        <span class="font-outfit text-[11px] font-black tracking-[0.25em] text-ink uppercase leading-none">Referèndum</span>
+        <span class="font-outfit text-base font-black text-brand-red leading-none mt-1">2030</span>
+      </div>
+    </a>
+
+    <!-- Desktop Navigation -->
+    <nav aria-label="Navegació principal" class="hidden md:flex items-center gap-8">
+      <ul class="flex items-center gap-6">
+        {navItems.map((item) => (
+          <li class="relative">
+            <a 
+              class={`text-sm font-semibold py-2 block transition-colors duration-200 ${
+                isActive(item.href) 
+                  ? "text-brand-red font-bold" 
+                  : "text-muted hover:text-ink"
+              }`} 
+              href={item.href}
+              aria-current={isActive(item.href) ? "page" : undefined}
+            >
+              {item.label}
+            </a>
+            {isActive(item.href) && (
+              <span class="absolute bottom-[-24px] left-0 right-0 h-[3px] bg-brand-red rounded-t-full" />
+            )}
+          </li>
+        ))}
+      </ul>
+
+      <!-- Language selector mockup (CA) -->
+      <div class="flex items-center gap-1.5 text-xs font-bold text-ink hover:text-brand-red cursor-pointer pl-4 border-l border-line transition-colors duration-150" aria-label="Idioma actual: Català">
+        <span>CA</span>
+        <svg class="w-3.5 h-3.5 text-muted group-hover:text-brand-red" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"></path>
+        </svg>
+      </div>
+    </nav>
+
+    <!-- Mobile Navigation Toggle Menu (Accessible & CSS based) -->
+    <div class="md:hidden flex items-center gap-3">
+      <div class="flex items-center gap-1 text-xs font-bold text-ink pr-3 border-r border-line">
+        <span>CA</span>
+      </div>
+      <label for="mobile-menu-toggle" class="cursor-pointer p-2 rounded-md hover:bg-crema-dark transition-colors" aria-label="Obrir menú de navegació">
+        <svg class="w-6 h-6 text-ink" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16m-7 6h7"></path>
+        </svg>
+      </label>
+    </div>
+  </div>
+
+  <!-- Hidden mobile menu trigger checkbox -->
+  <input type="checkbox" id="mobile-menu-toggle" class="peer hidden" />
+
+  <!-- Mobile Drawer Menu -->
+  <div class="peer-checked:block hidden md:hidden border-t border-line bg-white animate-fade-in">
+    <nav class="container py-4">
+      <ul class="flex flex-col gap-3">
+        {navItems.map((item) => (
+          <li>
+            <a 
+              class={`text-sm font-semibold p-2.5 rounded-lg block transition-colors ${
+                isActive(item.href) 
+                  ? "bg-brand-red/5 text-brand-red font-bold" 
+                  : "text-muted hover:bg-crema-dark hover:text-ink"
+              }`} 
+              href={item.href}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>

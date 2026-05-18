@@ -1,0 +1,91 @@
+---
+import { getRoute } from "../../shared/lib/routes";
+import { useTranslations } from "../../shared/i18n/translations";
+import type { Locale } from "../../shared/i18n/translations";
+
+interface Props {
+  className?: string;
+  lang?: Locale;
+}
+
+const { className = "", lang = "ca" } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<section class={`container py-8 ${className}`}>
+  <div class="bg-gradient-to-r from-brand-red to-brand-red-dark text-white rounded-2xl p-8 md:p-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center shadow-lg shadow-brand-red/10 relative overflow-hidden">
+    <!-- Subtle abstract stripes pattern background -->
+    <div class="absolute inset-0 opacity-5 pointer-events-none" aria-hidden="true">
+      <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="stripes" width="40" height="40" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <rect width="20" height="40" fill="#ffffff"></rect>
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#stripes)"></rect>
+      </svg>
+    </div>
+
+    <!-- Primary column -->
+    <div class="lg:col-span-5 flex flex-col gap-4 relative z-10">
+      <div class="flex items-center gap-3.5">
+        <div class="p-3 bg-white/10 rounded-xl text-white">
+          <svg class="w-6.5 h-6.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"></path>
+          </svg>
+        </div>
+        <h3 class="font-outfit text-xl font-extrabold tracking-tight">{t("security.title")}</h3>
+      </div>
+      <p class="text-sm text-crema/90 leading-relaxed font-medium">
+        {t("security.body")}
+      </p>
+      <a href={getRoute("transparencia", lang)} class="text-white text-xs font-bold flex items-center gap-1.5 hover:underline mt-2 w-fit">
+        {t("security.more")}
+        <svg class="w-3.5 h-3.5 rtl:rotate-180" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
+        </svg>
+      </a>
+    </div>
+
+    <!-- Thin vertical divider on large layouts -->
+    <div class="hidden lg:block lg:col-span-1 h-32 w-[1.5px] bg-white/15 mx-auto relative z-10" aria-hidden="true"></div>
+
+    <!-- Three pillars grid -->
+    <div class="lg:col-span-6 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-4 relative z-10">
+      
+      <!-- Guarantee Item: Codi obert -->
+      <div class="flex flex-col gap-2 group/item">
+        <div class="text-brand-gold group-hover/item:scale-105 transition-transform duration-200">
+          <svg class="w-6.5 h-6.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75L22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3l-4.5 16.5"></path>
+          </svg>
+        </div>
+        <h4 class="font-outfit text-sm font-bold text-white mt-1">{t("security.pillar1.title")}</h4>
+        <p class="text-xs text-crema/80 leading-relaxed font-medium">{t("security.pillar1.body")}</p>
+      </div>
+
+      <!-- Guarantee Item: Vots anònims -->
+      <div class="flex flex-col gap-2 group/item">
+        <div class="text-brand-gold group-hover/item:scale-105 transition-transform duration-200">
+          <svg class="w-6.5 h-6.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"></path>
+          </svg>
+        </div>
+        <h4 class="font-outfit text-sm font-bold text-white mt-1">{t("security.pillar2.title")}</h4>
+        <p class="text-xs text-crema/80 leading-relaxed font-medium">{t("security.pillar2.body")}</p>
+      </div>
+
+      <!-- Guarantee Item: Auditoria pública -->
+      <div class="flex flex-col gap-2 group/item">
+        <div class="text-brand-gold group-hover/item:scale-105 transition-transform duration-200">
+          <svg class="w-6.5 h-6.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z"></path>
+          </svg>
+        </div>
+        <h4 class="font-outfit text-sm font-bold text-white mt-1">{t("security.pillar3.title")}</h4>
+        <p class="text-xs text-crema/80 leading-relaxed font-medium">{t("security.pillar3.body")}</p>
+      </div>
+
+    </div>
+  </div>
+</section>

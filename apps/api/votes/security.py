@@ -6,7 +6,10 @@ from django.conf import settings
 
 
 def generate_demo_token() -> str:
-    return f"demo_{secrets.token_urlsafe(24)}"
+    alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+    first = "".join(secrets.choice(alphabet) for _ in range(4))
+    second = "".join(secrets.choice(alphabet) for _ in range(4))
+    return f"REF30-{first}-{second}"
 
 
 def hash_value(value: str) -> str:
@@ -21,4 +24,3 @@ def hash_value(value: str) -> str:
 
 def hash_token(token: str) -> str:
     return hash_value(token.strip())
-

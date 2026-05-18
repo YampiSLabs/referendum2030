@@ -1,29 +1,5 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
+import TransparenciaPage from "../components/pages/TransparenciaPage.astro";
 ---
 
-<BaseLayout title="Transparència | Referèndum 2030" description="Auditoria i criteris de transparència del demo.">
-  <section class="container grid gap-8 py-12">
-    <div class="max-w-3xl">
-      <h1 class="text-4xl font-black">Transparència</h1>
-      <p class="mt-3 leading-7 text-[var(--muted)]">
-        El sistema registra esdeveniments públics de demostració sense exposar tokens, adreces IP, agents d'usuari ni dades personals.
-      </p>
-    </div>
-    <div class="grid gap-4 md:grid-cols-2">
-      <article class="panel p-5">
-        <h2 class="text-xl font-black">Auditoria pública demo</h2>
-        <p class="mt-2 leading-7 text-[var(--muted)]">
-          Els esdeveniments visibles són creació del referendum, emissió de token, vot registrat i consulta de resultats.
-        </p>
-      </article>
-      <article class="panel p-5">
-        <h2 class="text-xl font-black">Privadesa</h2>
-        <p class="mt-2 leading-7 text-[var(--muted)]">
-          Els tokens es desen hashejats i els resultats només es publiquen agregats.
-        </p>
-      </article>
-    </div>
-  </section>
-</BaseLayout>
-
+<TransparenciaPage lang="ca" />

@@ -6,7 +6,7 @@ services:
       POSTGRES_USER: referendum2030
       POSTGRES_PASSWORD: referendum2030
     ports:
-      - "5432:5432"
+      - "${POSTGRES_PORT:-5432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -27,7 +27,7 @@ services:
       DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,0.0.0.0
       CORS_ALLOWED_ORIGINS: http://localhost:4321,http://127.0.0.1:4321,https://cdryampi.github.io
     ports:
-      - "8000:8000"
+      - "${API_PORT:-8000}:8000"
     volumes:
       - ./apps/api:/app
     depends_on:
@@ -37,13 +37,17 @@ services:
   web:
     image: node:22-alpine
     working_dir: /workspace
-    command: sh -c "corepack enable && pnpm install && pnpm --filter web dev --host 0.0.0.0"
+    command: sh -c "corepack enable && pnpm install && rm -rf apps/web/node_modules/.vite && pnpm --filter web dev --host 0.0.0.0"
     environment:
+      CI: "true"
       PUBLIC_API_BASE_URL: http://localhost:8000/api/v1
+      PUBLIC_USE_MOCKS: "false"
     ports:
-      - "4321:4321"
+      - "${WEB_PORT:-4321}:4321"
     volumes:
       - .:/workspace
+      - node_modules:/workspace/node_modules
+      - web_node_modules:/workspace/apps/web/node_modules
       - pnpm_store:/root/.local/share/pnpm/store
     depends_on:
       - api
@@ -51,3 +55,5 @@ services:
 volumes:
   postgres_data:
   pnpm_store:
+  node_modules:
+  web_node_modules:

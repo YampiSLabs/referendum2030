@@ -1,0 +1,207 @@
+---
+import PageShell from "../astro/PageShell.astro";
+import PageHero from "../astro/PageHero.astro";
+import InfoCard from "../astro/InfoCard.astro";
+import AuditLedger from "../../features/audit/ui/AuditLedger";
+import { getCollection } from "astro:content";
+import { LOCALIZED_ROUTES } from "../../shared/lib/routes";
+import { useTranslations } from "../../shared/i18n/translations";
+import type { Locale } from "../../shared/i18n/translations";
+
+interface Props {
+  lang?: Locale;
+}
+
+const { lang = "ca" } = Astro.props;
+const t = useTranslations(lang);
+const routes = LOCALIZED_ROUTES[lang] ?? LOCALIZED_ROUTES["ca"];
+const getRoute = (key: keyof typeof LOCALIZED_ROUTES["ca"]) => routes[key] ?? LOCALIZED_ROUTES["ca"][key];
+
+// Load content collections, filtering by the active language subdirectory path
+const transparencyDocs = await getCollection("transparency");
+const filteredDocs = transparencyDocs.filter((doc) => doc.id.startsWith(`${lang}/`));
+const sortedDocs = filteredDocs.sort((a, b) => (a.data.order || 0) - (b.data.order || 0));
+---
+
+<PageShell lang={lang} title={t("meta.transparency.title")} description={t("meta.transparency.description")}>
+  
+  <!-- Header Page Row -->
+  <PageHero 
+    title={t("transparency.hero.title")} 
+    description={t("transparency.hero.description")}
+    showDisclaimer={true}
+    lang={lang}
+  />
+
+  <!-- Visual Pillars Section -->
+  <section class="container pb-16">
+    <div class="flex flex-col gap-4 mb-10 animate-fade-in">
+      <span class="text-[10px] font-black tracking-widest text-brand-red uppercase">{t("transparency.pillars.badge")}</span>
+      <h2 class="font-outfit text-2xl md:text-3xl font-extrabold text-gray-900 relative pb-2.5 w-fit">
+        {t("transparency.pillars.title")}
+        <span class="absolute bottom-0 left-0 w-8 h-[2.5px] bg-brand-red rounded-full"></span>
+      </h2>
+    </div>
+
+    <!-- Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <InfoCard 
+        title={t("transparency.pillars.card1.title")} 
+        description={t("transparency.pillars.card1.body")}
+        icon="code"
+        linkHref="https://github.com"
+        linkLabel={t("transparency.pillars.card1.link")}
+      />
+      <InfoCard 
+        title={t("transparency.pillars.card2.title")} 
+        description={t("transparency.pillars.card2.body")}
+        icon="lock"
+        linkHref={getRoute("faq")}
+        linkLabel={t("transparency.pillars.card2.link")}
+      />
+      <InfoCard 
+        title={t("transparency.pillars.card3.title")} 
+        description={t("transparency.pillars.card3.body")}
+        icon="shield"
+        linkHref={getRoute("faq")}
+        linkLabel={t("transparency.pillars.card3.link")}
+      />
+      <InfoCard 
+        title={t("transparency.pillars.card4.title")} 
+        description={t("transparency.pillars.card4.body")}
+        icon="key"
+        linkHref={getRoute("resultats")}
+        linkLabel={t("transparency.pillars.card4.link")}
+      />
+    </div>
+  </section>
+
+  <!-- Loaded Markdown Content collections from src/content/transparency/[lang]/* -->
+  {sortedDocs.length > 0 && (
+    <section class="container pb-16">
+      <div class="panel p-8 sm:p-10 flex flex-col gap-8 max-w-4xl mx-auto border-brand-gold/30 bg-crema-dark/15">
+        <h3 class="font-outfit text-xl font-black text-gray-900 border-b border-line pb-4 flex items-center gap-2">
+          <svg class="w-5 h-5 text-brand-red" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"></path>
+          </svg>
+          {t("transparency.docs.title")}
+        </h3>
+        <div class="grid gap-8">
+          {sortedDocs.map(async (doc) => {
+            const { Content } = await doc.render();
+            return (
+              <article class="prose max-w-none text-xs text-muted leading-relaxed font-semibold">
+                <h4 class="font-outfit text-base font-extrabold text-gray-900 mt-2">{doc.data.title}</h4>
+                {doc.data.description && <p class="text-[11px] text-brand-red font-bold italic mt-1">{doc.data.description}</p>}
+                <div class="mt-3.5 space-y-3">
+                  <Content />
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Dual Audit Ledger and Dataset Grids -->
+  <section class="container pb-16">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Left Column (7 cols): Public ledger timeline widget -->
+      <div class="lg:col-span-7 flex flex-col gap-6">
+        <div class="panel p-6 sm:p-8 bg-gradient-to-br from-white to-crema-dark/20">
+          <div class="flex flex-col gap-2 mb-6">
+            <h3 class="font-outfit text-lg font-black text-gray-900">{t("transparency.ledger.title")}</h3>
+            <p class="text-xs text-muted leading-relaxed font-semibold">
+              {t("transparency.ledger.body")}
+            </p>
+          </div>
+          
+          <!-- React Live Ledger Feed -->
+          <AuditLedger client:only="react" lang={lang} />
+        </div>
+      </div>
+
+      <!-- Right Column (5 cols): What is saved vs what is not saved -->
+      <aside class="lg:col-span-5 flex flex-col gap-6">
+        <article class="panel p-6 sm:p-8 bg-white flex flex-col gap-6">
+          <div class="flex flex-col gap-1">
+            <h3 class="font-outfit text-base font-extrabold text-ink">{t("transparency.policy.title")}</h3>
+            <p class="text-[11px] text-muted font-medium">
+              {t("transparency.policy.subtitle")}
+            </p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 border-t border-line/65 pt-6">
+            
+            <!-- What is saved column -->
+            <div class="flex flex-col gap-4">
+              <span class="text-[10px] font-black tracking-wider text-green uppercase flex items-center gap-1">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path>
+                </svg>
+                {t("transparency.policy.saved")}
+              </span>
+              <ul class="flex flex-col gap-2.5 text-xs text-gray-700 font-semibold leading-relaxed list-disc pl-4">
+                <li>{t("transparency.policy.saved1")}</li>
+                <li>{t("transparency.policy.saved2")}</li>
+                <li>{t("transparency.policy.saved3")}</li>
+                <li>{t("transparency.policy.saved4")}</li>
+              </ul>
+            </div>
+
+            <!-- What is NOT saved column -->
+            <div class="flex flex-col gap-4">
+              <span class="text-[10px] font-black tracking-wider text-brand-red uppercase flex items-center gap-1">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+                {t("transparency.policy.notsaved")}
+              </span>
+              <ul class="flex flex-col gap-2.5 text-xs text-gray-700 font-semibold leading-relaxed list-disc pl-4">
+                <li>{t("transparency.policy.notsaved1")}</li>
+                <li>{t("transparency.policy.notsaved2")}</li>
+                <li>{t("transparency.policy.notsaved3")}</li>
+                <li>{t("transparency.policy.notsaved4")}</li>
+              </ul>
+            </div>
+
+          </div>
+
+          <div class="border-t border-line/65 pt-4 mt-2 flex items-start gap-2.5 text-[10.5px] font-bold text-muted bg-crema-dark/35 p-3 rounded-lg border">
+            <svg class="w-4 h-4 text-brand-red flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"></path>
+            </svg>
+            <span>{t("transparency.policy.warning")}</span>
+          </div>
+        </article>
+
+        <!-- White paper block shortcut -->
+        <article class="panel p-6 bg-gradient-to-br from-brand-red to-brand-red-dark text-white flex flex-col gap-4 shadow-md">
+          <div class="flex items-center gap-3">
+            <svg class="w-5 h-5 text-brand-gold" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25"></path>
+            </svg>
+            <h3 class="font-outfit text-sm font-black uppercase tracking-wide">{t("transparency.technical.title")}</h3>
+          </div>
+          <p class="text-xs text-crema/90 leading-relaxed font-medium">
+            {t("transparency.technical.body")}
+          </p>
+          <button 
+            type="button"
+            class="text-[11px] font-black text-brand-gold hover:underline flex items-center gap-1 mt-1 w-fit bg-transparent border-0 cursor-pointer text-left"
+            onclick={`alert("${t("transparency.technical.alert")}")`}
+          >
+            {t("transparency.technical.btn")}
+            <svg class="w-3.5 h-3.5 rtl:rotate-180" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
+            </svg>
+          </button>
+        </article>
+      </aside>
+
+    </div>
+  </section>
+
+</PageShell>

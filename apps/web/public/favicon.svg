@@ -1,6 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Referendum 2030">
-  <rect width="64" height="64" rx="10" fill="#f7f0df"/>
-  <path d="M14 18h36v28H14z" fill="#fffaf0" stroke="#641622" stroke-width="4"/>
-  <path d="M22 32l6 6 14-16" fill="none" stroke="#8f1d2c" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M14 46h36" stroke="#e8c65a" stroke-width="5"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Referèndum 2030">
+  <!-- Background rounded square -->
+  <rect width="64" height="64" rx="12" fill="#8B1C2B"/>
+
+  <!-- Ballot box body -->
+  <rect x="12" y="28" width="40" height="26" rx="3" fill="#F7F0DF"/>
+
+  <!-- Ballot slot (top of box) -->
+  <rect x="24" y="26" width="16" height="5" rx="2.5" fill="#8B1C2B"/>
+
+  <!-- Ballot paper being inserted -->
+  <rect x="27" y="12" width="10" height="18" rx="2" fill="#F7F0DF" stroke="#D4A017" stroke-width="1.5"/>
+
+  <!-- 4 Senyera red stripes on ballot -->
+  <rect x="29" y="15" width="6" height="1.5" rx="0.75" fill="#8B1C2B"/>
+  <rect x="29" y="18.5" width="6" height="1.5" rx="0.75" fill="#8B1C2B"/>
+  <rect x="29" y="22" width="6" height="1.5" rx="0.75" fill="#8B1C2B"/>
+  <rect x="29" y="25.5" width="6" height="1.5" rx="0.75" fill="#8B1C2B"/>
+
+  <!-- Checkmark inside box -->
+  <path d="M21 42 l5 5 11-12" fill="none" stroke="#8B1C2B" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Gold accent bar at bottom of box -->
+  <rect x="12" y="49" width="40" height="5" rx="0 0 3 3" fill="#D4A017"/>
 </svg>

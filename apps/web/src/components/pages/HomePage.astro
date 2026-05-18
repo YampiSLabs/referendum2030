@@ -1,0 +1,128 @@
+---
+import PageShell from "../astro/PageShell.astro";
+import Hero from "../astro/Hero.astro";
+import StatusSummary from "../astro/StatusSummary.astro";
+import StepCard from "../astro/StepCard.astro";
+import SecurityBand from "../astro/SecurityBand.astro";
+import { getRoute } from "../../shared/lib/routes";
+import { useTranslations } from "../../shared/i18n/translations";
+import type { Locale } from "../../shared/i18n/translations";
+
+interface Props {
+  lang?: Locale;
+}
+
+const { lang = "ca" } = Astro.props;
+const t = useTranslations(lang);
+
+// Static defaults for homepage summary
+const TOTAL_VOTES = 245730;
+---
+
+<PageShell lang={lang} title={t("meta.title")} description={t("meta.description")}>
+  
+  <!-- Premium Hero Landing Block -->
+  <Hero lang={lang} />
+
+  <!-- Live Stats Banner -->
+  <StatusSummary lang={lang} totalVotes={TOTAL_VOTES} isOpen={true} />
+
+  <!-- Process Workflow Guide -->
+  <section id="com-funciona" class="container py-16 scroll-mt-20">
+    <div class="flex flex-col items-center text-center gap-4 mb-12">
+      <span class="text-[10px] font-black tracking-widest text-brand-red uppercase">{t("stats.title")}</span>
+      <h2 class="font-outfit text-3xl md:text-4xl font-extrabold text-gray-900 relative pb-3">
+        {t("stats.subtitle")}
+        <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-12 h-[3px] bg-brand-red rounded-full"></span>
+      </h2>
+      <p class="text-sm text-muted max-w-lg leading-relaxed font-semibold mt-1">
+        {t("stats.description")}
+      </p>
+    </div>
+
+    <!-- 4-Step Cards Grid -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-6">
+      <StepCard 
+        number="1" 
+        title={t("step.1.title")} 
+        body={t("step.1.body")}
+        icon="token"
+      />
+      <StepCard 
+        number="2" 
+        title={t("step.2.title")} 
+        body={t("step.2.body")}
+        icon="question"
+      />
+      <StepCard 
+        number="3" 
+        title={t("step.3.title")} 
+        body={t("step.3.body")}
+        icon="vote"
+      />
+      <StepCard 
+        number="4" 
+        title={t("step.4.title")} 
+        body={t("step.4.body")}
+        icon="chart"
+      />
+    </div>
+  </section>
+
+  <!-- High-Trust Red Security Guarantees Band -->
+  <SecurityBand lang={lang} />
+
+  <!-- Quick Access CTA Cards -->
+  <section class="container py-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      
+      <!-- CTA Card 1: Votar -->
+      <article class="panel p-8 flex flex-col justify-between items-start gap-6 bg-gradient-to-br from-white to-crema-dark/25 relative overflow-hidden group">
+        <!-- Floating decor circle -->
+        <div class="absolute -right-20 -bottom-20 w-44 h-44 rounded-full bg-brand-red/5 group-hover:bg-brand-red/10 transition-colors -z-10" aria-hidden="true"></div>
+        
+        <div class="flex flex-col gap-3">
+          <span class="text-[9px] font-black tracking-widest text-brand-red uppercase">{t("cta.card1.badge")}</span>
+          <h3 class="font-outfit text-2xl font-black text-gray-900 group-hover:text-brand-red transition-colors">
+            {t("cta.card1.title")}
+          </h3>
+          <p class="text-xs text-muted leading-relaxed font-semibold max-w-sm mt-1">
+            {t("cta.card1.body")}
+          </p>
+        </div>
+
+        <a class="btn mt-4 group-hover:scale-102 transition-transform duration-200" href={getRoute("votar", lang)} aria-label={t("cta.card1.aria")}>
+          {t("cta.card1.btn")}
+          <svg class="w-4.5 h-4.5 group-hover:translate-x-0.5 transition-transform rtl:rotate-180" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
+          </svg>
+        </a>
+      </article>
+
+      <!-- CTA Card 2: Resultados -->
+      <article class="panel p-8 flex flex-col justify-between items-start gap-6 bg-gradient-to-br from-white to-crema-dark/25 relative overflow-hidden group">
+        <!-- Floating decor circle -->
+        <div class="absolute -right-20 -bottom-20 w-44 h-44 rounded-full bg-brand-gold/10 group-hover:bg-brand-gold/15 transition-colors -z-10" aria-hidden="true"></div>
+
+        <div class="flex flex-col gap-3">
+          <span class="text-[9px] font-black tracking-widest text-brand-red uppercase">{t("cta.card2.badge")}</span>
+          <h3 class="font-outfit text-2xl font-black text-gray-900 group-hover:text-brand-red transition-colors">
+            {t("cta.card2.title")}
+          </h3>
+          <p class="text-xs text-muted leading-relaxed font-semibold max-w-sm mt-1">
+            {t("cta.card2.body")}
+          </p>
+        </div>
+
+        <a class="btn btn-secondary mt-4 group-hover:scale-102 transition-transform duration-200" href={getRoute("resultats", lang)} aria-label={t("cta.card2.aria")}>
+          {t("cta.card2.btn")}
+          <svg class="w-4.5 h-4.5 group-hover:translate-x-0.5 transition-transform rtl:rotate-180" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
+          </svg>
+        </a>
+      </article>
+
+    </div>
+  </section>
+
+</PageShell>

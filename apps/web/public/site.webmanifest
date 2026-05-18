@@ -1,0 +1,19 @@
+{
+  "name": "Referèndum 2030",
+  "short_name": "Ref. 2030",
+  "description": "Simulació cívica digital del Referèndum 2030 sobre el futur polític de Catalunya",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F7F0DF",
+  "theme_color": "#8B1C2B",
+  "lang": "ca",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["government", "politics", "education"]
+}

@@ -1,6 +1,7 @@
 import secrets
 
 from django.db import models
+from simple_history.models import HistoricalRecords
 
 
 class VoterToken(models.Model):
@@ -12,6 +13,7 @@ class VoterToken(models.Model):
     token_hash = models.CharField(max_length=128, unique=True)
     used_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    history = HistoricalRecords()
 
     class Meta:
         ordering = ["-created_at"]
@@ -32,6 +34,7 @@ class Vote(models.Model):
     ip_hash = models.CharField(max_length=128, blank=True)
     user_agent_hash = models.CharField(max_length=128, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    history = HistoricalRecords()
 
     class Meta:
         ordering = ["-created_at"]
@@ -41,4 +44,7 @@ class Vote(models.Model):
 
     @staticmethod
     def generate_receipt_code() -> str:
-        return f"R2030-{secrets.token_urlsafe(9)}"
+        alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+        first = "".join(secrets.choice(alphabet) for _ in range(4))
+        second = "".join(secrets.choice(alphabet) for _ in range(4))
+        return f"RCP-{first}-{second}"
