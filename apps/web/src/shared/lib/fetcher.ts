@@ -16,6 +16,42 @@ export class FetcherError extends Error {
   }
 }
 
+function extractMessage(data: any, status: number): string {
+  if (!data) {
+    return `Error del servidor (${status}).`;
+  }
+
+  if (data.message && data.message !== "Validation error.") {
+    return data.message;
+  }
+
+  if (data.detail) {
+    return typeof data.detail === "string" ? data.detail : JSON.stringify(data.detail);
+  }
+
+  const details = data.details || data;
+  if (typeof details === "object" && !Array.isArray(details)) {
+    const fieldMessages: string[] = [];
+    for (const [field, errors] of Object.entries(details)) {
+      if (field === "detail" || field === "message" || field === "status_code") continue;
+      if (Array.isArray(errors)) {
+        fieldMessages.push(`${field}: ${errors.join(", ")}`);
+      } else if (typeof errors === "string") {
+        fieldMessages.push(`${field}: ${errors}`);
+      }
+    }
+    if (fieldMessages.length > 0) {
+      return fieldMessages.join("; ");
+    }
+  }
+
+  if (data.message) {
+    return data.message;
+  }
+
+  return `Error del servidor (${status}).`;
+}
+
 interface FetcherOptions extends RequestInit {
   timeoutMs?: number;
 }
@@ -44,7 +80,7 @@ export async function fetcher<T>(url: string, options: FetcherOptions = {}): Pro
 
       throw new FetcherError({
         status: response.status,
-        message: errorDetails?.message || `Error del servidor (${response.statusText || response.status}).`,
+        message: extractMessage(errorDetails, response.status),
         details: errorDetails?.details || errorDetails,
       });
     }

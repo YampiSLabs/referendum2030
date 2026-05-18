@@ -13,6 +13,13 @@ from .security import generate_demo_token, hash_token, hash_value
 
 
 def issue_demo_token(*, referendum: Referendum) -> dict:
+    """
+    Issue a new demo voting token for the given referendum.
+
+    The plaintext token is returned once and never persisted — only its
+    HMAC-SHA256 hash is stored for later verification. An audit event is
+    recorded immediately.
+    """
     token = generate_demo_token()
     VoterToken.objects.create(referendum=referendum, token_hash=hash_token(token))
     record_event(
@@ -25,6 +32,14 @@ def issue_demo_token(*, referendum: Referendum) -> dict:
 
 @transaction.atomic
 def cast_demo_vote(*, referendum: Referendum, token: str, option_id: int, request) -> dict:
+    """
+    Cast one vote atomically.
+
+    Uses ``select_for_update`` to prevent race conditions on the referendum,
+    voter token, and option rows. Validates the token exists, hasn't been used
+    yet, and the option belongs to the referendum. IP and User-Agent are
+    hashed before storage for privacy.
+    """
     referendum = Referendum.objects.select_for_update().get(pk=referendum.pk)
     token_hash = hash_token(token)
 

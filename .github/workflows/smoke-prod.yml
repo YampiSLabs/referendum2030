@@ -1,0 +1,33 @@
+name: Smoke test production
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: smoke-prod
+  cancel-in-progress: false
+
+jobs:
+  api-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - run: python scripts/smoke-prod.py
+
+  e2e-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.30.3
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile=false
+      - run: npx playwright install chromium
+      - run: pnpm --filter web test:e2e:prod

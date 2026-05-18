@@ -81,8 +81,8 @@ docker compose run --rm api uv run python manage.py seed_demo_all
 Demo admin:
 
 - URL: `http://localhost:8000/admin/`
-- Username: `admin`
-- Password: `admin`
+- Username: `yampi`
+- Password: `thos`
 
 These credentials are intentionally public for the fictitious portfolio demo. Do not use them with real data, real secrets, or a production backend that stores sensitive information.
 
@@ -152,14 +152,14 @@ docker compose --env-file .env.prod -f compose.prod.yml exec api uv run python m
 Smoke checks:
 
 ```bash
-curl http://YOUR_SERVER_IP:8000/api/v1/healthz/
+curl http://<your-vps-ip>:8000/api/v1/healthz/
 ```
 
 Admin:
 
-- URL: `http://YOUR_SERVER_IP:8000/admin/`
-- Demo username: `admin`
-- Demo password: `admin`
+- URL: `http://<your-vps-ip>:8000/admin/`
+- Demo username: `yampi`
+- Demo password: `thos`
 
 For the first HTTP smoke test, `.env.prod.example` keeps secure cookies off. After a real API domain and HTTPS are active, set:
 
@@ -167,9 +167,9 @@ For the first HTTP smoke test, `.env.prod.example` keeps secure cookies off. Aft
 SESSION_COOKIE_SECURE=True
 CSRF_COOKIE_SECURE=True
 SECURE_SSL_REDIRECT=True
-CORS_ALLOWED_ORIGINS=https://cdryampi.github.io
-CSRF_TRUSTED_ORIGINS=https://your-api-domain.example.com,https://cdryampi.github.io
-DJANGO_ALLOWED_HOSTS=your-api-domain.example.com
+CORS_ALLOWED_ORIGINS=https://yampislabs.github.io
+CSRF_TRUSTED_ORIGINS=https://referendum.yampi.eu,https://yampislabs.github.io
+DJANGO_ALLOWED_HOSTS=referendum.yampi.eu
 ```
 
 Then rebuild:
@@ -185,7 +185,7 @@ The workflow in `.github/workflows/pages.yml` builds `apps/web` and publishes `a
 Set repository Pages source to GitHub Actions. Configure:
 
 ```text
-PUBLIC_API_BASE_URL=https://your-api-domain.example.com/api/v1
+PUBLIC_API_BASE_URL=https://referendum.yampi.eu/api/v1
 ```
 
 as a repository variable. The frontend remains fully static and calls the Hostinger backend.

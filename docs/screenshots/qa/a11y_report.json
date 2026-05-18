@@ -1,0 +1,25 @@
+{
+  "generated": "2026-05-18T15:10:00Z",
+  "tool": "Playwright custom a11y audit",
+  "pages_checked": 10,
+  "checks": ["lang attribute", "h1 exists", "heading hierarchy", "img alt", "form labels", "button names", "main landmark", "Arabic RTL"],
+  "issues_found": 0,
+  "fixes_applied": [
+    {
+      "page": "/votar, /faq",
+      "file": "VotarPage.astro, FaqPage.astro",
+      "change": "Changed <h3> to <h2> for section headings to fix skipped heading level (h1→h3)",
+      "status": "verified in build output"
+    }
+  ],
+  "passing": {
+    "all_pages_lang": true,
+    "all_pages_h1": true,
+    "all_pages_main": true,
+    "arabic_rtl": true,
+    "img_alt_attributes": true,
+    "form_labels": true,
+    "button_names": true
+  },
+  "summary": "No critical WCAG errors found. 3 minor heading hierarchy issues fixed."
+}

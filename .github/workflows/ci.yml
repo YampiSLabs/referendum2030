@@ -21,6 +21,10 @@ jobs:
       - run: uv sync
       - run: uv run ruff check .
       - run: uv run pytest
+      - name: Verify OpenAPI contract
+        run: |
+          uv run python manage.py spectacular --format openapi-json --file /tmp/schema-ci.json
+          python ../../scripts/verify-openapi-contract.py /tmp/schema-ci.json ../../packages/contracts/openapi.json
 
   web:
     runs-on: ubuntu-latest
@@ -38,3 +42,29 @@ jobs:
         env:
           PUBLIC_API_BASE_URL: ${{ vars.PUBLIC_API_BASE_URL }}
           PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+
+  e2e:
+    runs-on: ubuntu-latest
+    needs: [backend, web]
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.30.3
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile=false
+      - name: Install Playwright browsers
+        run: pnpm --filter web exec playwright install --with-deps chromium
+      - name: Run E2E tests (mock mode)
+        run: pnpm test:web
+        env:
+          PUBLIC_USE_MOCKS: "true"
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-traces
+          path: apps/web/test-results/
+          retention-days: 7

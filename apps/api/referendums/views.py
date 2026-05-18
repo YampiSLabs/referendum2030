@@ -23,11 +23,15 @@ from .services import build_results_payload
 
 
 class HealthCheckSerializer(Serializer):
+    """Trivial serializer so drf-spectacular can document the healthcheck response."""
+
     status = CharField()
 
 
 @extend_schema(responses=HealthCheckSerializer)
 class HealthCheckView(APIView):
+    """Public healthcheck — returns {"status": "ok"} when the service is running."""
+
     permission_classes = [AllowAny]
     authentication_classes = []
 
@@ -80,16 +84,6 @@ class ReferendumViewSet(viewsets.ReadOnlyModelViewSet):
         )
         return Response(VoteReceiptSerializer(payload).data, status=status.HTTP_201_CREATED)
 
-    @action(
-        detail=True,
-        methods=["post"],
-        permission_classes=[DemoWritePermission],
-        throttle_classes=[DemoVoteRateThrottle],
-        url_path="vote",
-    )
-    def vote_alias(self, request, slug=None):
-        return self.votes(request, slug=slug)
-
     @action(detail=True, methods=["get"], url_path="results")
     def results(self, request, slug=None):
         if not config.PUBLIC_RESULTS_ENABLED:
@@ -108,5 +102,6 @@ class ReferendumViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(AuditEventSerializer(events, many=True).data)
 
     @action(detail=True, methods=["get"], url_path="audit")
-    def audit_alias(self, request, slug=None):
+    def audit(self, request, slug=None):
+        """Alias for ``logs`` — returns the same public audit log."""
         return self.logs(request, slug=slug)

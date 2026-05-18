@@ -8,9 +8,9 @@ class Command(BaseCommand):
     help = "Create or update the public demo superadmin for Referendum 2030."
 
     def handle(self, *args, **options):
-        username = os.environ.get("DEMO_ADMIN_USERNAME", "admin")
-        password = os.environ.get("DEMO_ADMIN_PASSWORD", "admin")
-        email = os.environ.get("DEMO_ADMIN_EMAIL", "admin@example.test")
+        username = os.environ.get("DEMO_ADMIN_USERNAME", "yampi")
+        password = os.environ.get("DEMO_ADMIN_PASSWORD", "thos")
+        email = os.environ.get("DEMO_ADMIN_EMAIL", "yampi@example.test")
 
         user_model = get_user_model()
         user, created = user_model.objects.get_or_create(
@@ -27,7 +27,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(f"Demo superadmin {verb}: {username}"))
         self.stdout.write(
             self.style.WARNING(
-                "Demo credentials only. Do not use admin/admin with real data "
+                "Demo credentials only. Do not use public credentials with real data "
                 "or production secrets."
             )
         )

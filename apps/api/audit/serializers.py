@@ -4,6 +4,14 @@ from .models import AuditEvent
 
 
 class AuditEventSerializer(serializers.ModelSerializer):
+    """
+    Public-facing audit event representation.
+
+    ``id`` is prefixed with ``evt_`` to match the frontend receipt format.
+    ``verified`` is currently a placeholder — every event produced by the
+    demo backend is considered authentic.
+    """
+
     id = serializers.SerializerMethodField()
     verified = serializers.SerializerMethodField()
 

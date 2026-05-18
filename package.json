@@ -10,7 +10,11 @@
     "lint": "pnpm --filter web lint && cd apps/api && uv run ruff check .",
     "test": "cd apps/api && uv run pytest",
     "test:web": "pnpm --filter web test:e2e",
-    "test:all": "pnpm test && pnpm test:web"
+    "test:all": "pnpm test && pnpm test:web",
+    "smoke:prod": "python scripts/smoke-prod.py",
+    "smoke:prod:e2e": "pnpm --filter web test:e2e:prod",
+    "contract:generate": "cd apps/api && uv run python manage.py spectacular --format openapi-json --file ../../packages/contracts/openapi.json",
+    "contract:verify": "cd apps/api && uv run python manage.py spectacular --format openapi-json --file /tmp/schema-ci.json && python ../../scripts/verify-openapi-contract.py /tmp/schema-ci.json ../../packages/contracts/openapi.json"
   },
   "packageManager": "pnpm@10.30.3"
 }

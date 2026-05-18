@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { FAQ_ITEMS, FAQ_CATEGORIES } from "../../shared/lib/constants";
+import { FAQ_ITEMS, FAQ_CATEGORIES } from "./faq-data";
 
 export default function FaqAccordion() {
   const [activeCategory, setActiveCategory] = useState("all");

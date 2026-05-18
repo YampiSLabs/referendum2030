@@ -1,18 +1,11 @@
 from django.contrib import admin
-from django.http import JsonResponse
 from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
 from referendums.views import HealthCheckView
 
-
-def healthz_compat(request):
-    return JsonResponse({"status": "ok"})
-
-
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/v1/healthz", healthz_compat, name="healthz-noslash"),
     path("api/v1/healthz/", HealthCheckView.as_view(), name="healthz"),
     path("api/v1/schema/", SpectacularAPIView.as_view(), name="schema"),
     path(

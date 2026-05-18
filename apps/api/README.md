@@ -32,8 +32,8 @@ for enabling/disabling demo voting and public results.
 Demo admin access:
 
 - URL: `http://127.0.0.1:8000/admin/`
-- Username: `admin`
-- Password: `admin`
+- Username: `yampi`
+- Password: `thos`
 
 The demo admin account is created only by `seed_demo_admin` or `seed_demo_all`.
 It is public on purpose for portfolio review, and must not be reused with real

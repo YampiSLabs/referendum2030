@@ -7,6 +7,7 @@ const useMocks = process.env.PUBLIC_USE_MOCKS ?? "true";
 
 export default defineConfig({
   testDir: "./e2e",
+  testIgnore: "production-smoke.spec.ts",
   timeout: 30_000,
   expect: {
     timeout: 10_000,
@@ -18,12 +19,13 @@ export default defineConfig({
   webServer: skipWebServer
     ? undefined
     : {
-        command: "pnpm dev --host 127.0.0.1 --port 4322",
+        command: "pnpm dev --host 127.0.0.1 --port 4322 --strictPort",
         url: baseURL,
         reuseExistingServer: reuseWebServer,
         env: {
           PUBLIC_API_BASE_URL: process.env.PUBLIC_API_BASE_URL ?? "http://127.0.0.1:65535/api/v1",
           PUBLIC_USE_MOCKS: useMocks,
+          PUBLIC_SITE_URL: process.env.PUBLIC_SITE_URL ?? baseURL,
         },
       },
   projects: [

@@ -1,11 +1,11 @@
 # Referèndum 2030 – robots.txt
-# https://referundum2030.cat
+# https://yampislabs.github.io/referendum2030
 
 User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://referundum2030.cat/sitemap-index.xml
+Sitemap: https://yampislabs.github.io/referendum2030/sitemap-index.xml
 
 # Disallow private API paths if crawled directly
 Disallow: /api/

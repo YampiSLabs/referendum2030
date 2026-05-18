@@ -115,6 +115,53 @@ REST_FRAMEWORK = {
     "EXCEPTION_HANDLER": "core.exceptions.api_exception_handler",
 }
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "structured": {
+            "format": "{asctime} {levelname} {name} {message}",
+            "style": "{",
+        },
+        "simple": {
+            "format": "{levelname} {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "structured",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
+    "loggers": {
+        "django": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+        "django.request": {
+            "handlers": ["console"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        "django.security": {
+            "handlers": ["console"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        "django.server": {
+            "handlers": ["console"],
+            "level": "INFO",
+            "propagate": False,
+        },
+    },
+}
+
 SPECTACULAR_SETTINGS = {
     "TITLE": "Referendum 2030 API",
     "DESCRIPTION": (
@@ -141,6 +188,46 @@ CONSTANCE_CONFIG = {
 
 UNFOLD = {
     "SITE_TITLE": "Referendum 2030",
-    "SITE_HEADER": "Referendum 2030 Admin",
-    "SITE_SUBHEADER": "Fictitious demo backend",
+    "SITE_HEADER": "Referendum 2030",
+    "SITE_SUBHEADER": "Admin civic demo",
+    "SITE_SYMBOL": "how_to_vote",
+    "SITE_URL": "/api/v1/docs/",
+    "SHOW_HISTORY": True,
+    "SHOW_VIEW_ON_SITE": False,
+    "COLORS": {
+        "base": {
+            "50": "oklch(99% .01 90)",
+            "100": "oklch(97% .02 88)",
+            "200": "oklch(93% .03 86)",
+            "300": "oklch(87% .04 84)",
+            "400": "oklch(74% .05 80)",
+            "500": "oklch(59% .05 75)",
+            "600": "oklch(46% .05 70)",
+            "700": "oklch(35% .04 68)",
+            "800": "oklch(25% .035 260)",
+            "900": "oklch(18% .035 260)",
+            "950": "oklch(12% .03 260)",
+        },
+        "primary": {
+            "50": "oklch(97% .035 25)",
+            "100": "oklch(93% .065 25)",
+            "200": "oklch(86% .12 25)",
+            "300": "oklch(76% .18 25)",
+            "400": "oklch(66% .23 25)",
+            "500": "oklch(58% .25 25)",
+            "600": "oklch(50% .24 25)",
+            "700": "oklch(43% .21 25)",
+            "800": "oklch(36% .17 25)",
+            "900": "oklch(30% .13 25)",
+            "950": "oklch(23% .10 25)",
+        },
+        "font": {
+            "subtle-light": "oklch(46% .05 70)",
+            "subtle-dark": "oklch(74% .05 80)",
+            "default-light": "oklch(35% .04 68)",
+            "default-dark": "oklch(93% .03 86)",
+            "important-light": "oklch(18% .035 260)",
+            "important-dark": "oklch(99% .01 90)",
+        },
+    },
 }

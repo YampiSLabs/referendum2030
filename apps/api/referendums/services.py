@@ -7,6 +7,14 @@ from .models import Referendum
 
 
 def build_results_payload(referendum: Referendum) -> dict:
+    """
+    Aggregate vote counts per option for the given referendum.
+
+    Uses a single ``Vote.objects.values(...).annotate(total=Count(...))``
+    query to compute per-option totals, then overlays zeros for options
+    that received no votes. Returns the same shape expected by the
+    frontend results widget.
+    """
     question = referendum.questions.prefetch_related("options").first()
     if question is None:
         return {

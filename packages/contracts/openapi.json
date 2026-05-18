@@ -1,133 +1,485 @@
 {
-  "openapi": "3.1.0",
-  "info": {
-    "title": "Referendum 2030 API",
-    "version": "1.0.0"
-  },
-  "paths": {
-    "/api/v1/healthz": {
-      "get": {
-        "summary": "Health check",
-        "responses": {
-          "200": {
-            "description": "API is available"
-          }
-        }
-      }
+    "openapi": "3.0.3",
+    "info": {
+        "title": "Referendum 2030 API",
+        "version": "1.0.0",
+        "description": "Fictitious referendum simulation API for portfolio and learning. No legal validity, no official electoral use."
     },
-    "/api/v1/referendums/current": {
-      "get": {
-        "summary": "Current referendum",
-        "responses": {
-          "200": {
-            "description": "Current public referendum"
-          }
-        }
-      }
-    },
-    "/api/v1/referendums/{slug}": {
-      "get": {
-        "summary": "Referendum detail",
-        "parameters": [
-          {
-            "name": "slug",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
+    "paths": {
+        "/api/v1/healthz/": {
+            "get": {
+                "operationId": "healthz_retrieve",
+                "description": "Public healthcheck — returns {\"status\": \"ok\"} when the service is running.",
+                "tags": [
+                    "healthz"
+                ],
+                "security": [
+                    {}
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HealthCheck"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
             }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Referendum detail"
-          }
-        }
-      }
-    },
-    "/api/v1/referendums/{slug}/tokens": {
-      "post": {
-        "summary": "Issue demo token",
-        "parameters": [
-          {
-            "name": "slug",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
+        },
+        "/api/v1/referendums/": {
+            "get": {
+                "operationId": "referendums_list",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "required": false,
+                        "in": "query",
+                        "description": "A page number within the paginated result set.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "page_size",
+                        "required": false,
+                        "in": "query",
+                        "description": "Number of results to return per page.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "tags": [
+                    "referendums"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    },
+                    {}
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaginatedReferendumList"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
             }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Plain demo token returned once"
-          }
-        }
-      }
-    },
-    "/api/v1/referendums/{slug}/vote": {
-      "post": {
-        "summary": "Cast demo vote",
-        "parameters": [
-          {
-            "name": "slug",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
+        },
+        "/api/v1/referendums/{slug}/": {
+            "get": {
+                "operationId": "referendums_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "slug",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[-a-zA-Z0-9_]+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "referendums"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    },
+                    {}
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Referendum"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
             }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Demo vote receipt"
-          },
-          "409": {
-            "description": "Token already used"
-          }
-        }
-      }
-    },
-    "/api/v1/referendums/{slug}/results": {
-      "get": {
-        "summary": "Aggregate results",
-        "parameters": [
-          {
-            "name": "slug",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
+        },
+        "/api/v1/referendums/{slug}/audit/": {
+            "get": {
+                "operationId": "referendums_audit_retrieve",
+                "description": "Alias for ``logs`` — returns the same public audit log.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "slug",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[-a-zA-Z0-9_]+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "referendums"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    },
+                    {}
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Referendum"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
             }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Aggregate totals only"
-          }
-        }
-      }
-    },
-    "/api/v1/referendums/{slug}/audit": {
-      "get": {
-        "summary": "Public audit events",
-        "parameters": [
-          {
-            "name": "slug",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "string"
+        },
+        "/api/v1/referendums/{slug}/logs/": {
+            "get": {
+                "operationId": "referendums_logs_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "slug",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[-a-zA-Z0-9_]+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "referendums"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    },
+                    {}
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Referendum"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
             }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Public safe audit events"
-          }
+        },
+        "/api/v1/referendums/{slug}/results/": {
+            "get": {
+                "operationId": "referendums_results_retrieve",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "slug",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[-a-zA-Z0-9_]+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "referendums"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    },
+                    {}
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Referendum"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/v1/referendums/{slug}/tokens/": {
+            "post": {
+                "operationId": "referendums_tokens_create",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "slug",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[-a-zA-Z0-9_]+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "referendums"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Referendum"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Referendum"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Referendum"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Referendum"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/v1/referendums/{slug}/votes/": {
+            "post": {
+                "operationId": "referendums_votes_create",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "slug",
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[-a-zA-Z0-9_]+$"
+                        },
+                        "required": true
+                    }
+                ],
+                "tags": [
+                    "referendums"
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Referendum"
+                            }
+                        },
+                        "application/x-www-form-urlencoded": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Referendum"
+                            }
+                        },
+                        "multipart/form-data": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Referendum"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Referendum"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/v1/referendums/current/": {
+            "get": {
+                "operationId": "referendums_current_retrieve",
+                "tags": [
+                    "referendums"
+                ],
+                "security": [
+                    {
+                        "cookieAuth": []
+                    },
+                    {
+                        "basicAuth": []
+                    },
+                    {}
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Referendum"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
         }
-      }
+    },
+    "components": {
+        "schemas": {
+            "HealthCheck": {
+                "type": "object",
+                "description": "Trivial serializer so drf-spectacular can document the healthcheck response.",
+                "properties": {
+                    "status": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "status"
+                ]
+            },
+            "PaginatedReferendumList": {
+                "type": "object",
+                "required": [
+                    "count",
+                    "results"
+                ],
+                "properties": {
+                    "count": {
+                        "type": "integer",
+                        "example": 123
+                    },
+                    "next": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=4"
+                    },
+                    "previous": {
+                        "type": "string",
+                        "nullable": true,
+                        "format": "uri",
+                        "example": "http://api.example.org/accounts/?page=2"
+                    },
+                    "results": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Referendum"
+                        }
+                    }
+                }
+            },
+            "Referendum": {
+                "type": "object",
+                "description": "Top-level referendum representation.\n\n``question`` is a ``SerializerMethodField`` that picks the first question\nfrom the prefetched ``questions`` queryset. The ViewSet already applies\n``prefetch_related`` so this does not cause an N+1 query.",
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "title": "Títol",
+                        "maxLength": 160
+                    },
+                    "slug": {
+                        "type": "string",
+                        "title": "Identificador únic",
+                        "maxLength": 50,
+                        "pattern": "^[-a-zA-Z0-9_]+$"
+                    },
+                    "description": {
+                        "type": "string",
+                        "title": "Descripció"
+                    },
+                    "is_current": {
+                        "type": "boolean",
+                        "title": "És actiu"
+                    },
+                    "question": {
+                        "type": "object",
+                        "additionalProperties": {},
+                        "nullable": true,
+                        "readOnly": true
+                    }
+                },
+                "required": [
+                    "question",
+                    "slug",
+                    "title"
+                ]
+            }
+        },
+        "securitySchemes": {
+            "basicAuth": {
+                "type": "http",
+                "scheme": "basic"
+            },
+            "cookieAuth": {
+                "type": "apiKey",
+                "in": "cookie",
+                "name": "sessionid"
+            }
+        }
     }
-  }
 }
-

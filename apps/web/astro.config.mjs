@@ -3,7 +3,7 @@ import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 
-const site = process.env.PUBLIC_SITE_URL || "https://referundum2030.cat";
+const site = process.env.PUBLIC_SITE_URL || "https://yampislabs.github.io/referendum2030";
 const sitePathname = new URL(site).pathname.replace(/\/$/, "");
 
 export default defineConfig({

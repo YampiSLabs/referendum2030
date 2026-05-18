@@ -1,74 +1,8 @@
-import type { Referendum, Results, AuditEvent } from "./types";
-
-export const MOCK_REFERENDUM: Referendum = {
-  title: "Referèndum 2030",
-  slug: "referendum-2030",
-  description: "Simulador cívic digital d'un referèndum fictici sobre el futur polític de Catalunya.",
-  is_current: true,
-  starts_at: "2030-05-12T09:00:00Z",
-  ends_at: "2030-05-18T20:00:00Z",
-  total_voters_census: 630000,
-  question: {
-    id: 1,
-    text: "Vols que Catalunya iniciï un procés constituent digital l'any 2030?",
-    options: [
-      { id: 1, label: "Sí", order: 1 },
-      { id: 2, label: "No", order: 2 },
-      { id: 3, label: "En blanc", order: 3 }
-    ]
-  }
-};
-
-export const MOCK_RESULTS: Results = {
-  referendum: "Referèndum 2030",
-  slug: "referendum-2030",
-  total_votes: 245730,
-  tokens_issued: 245730,
-  last_updated: "2030-05-18T20:05:00Z",
-  options: [
-    { option_id: 1, label: "Sí", votes: 128012 },
-    { option_id: 2, label: "No", votes: 95132 },
-    { option_id: 3, label: "En blanc", votes: 22586 }
-  ]
-};
-
-export const MOCK_DEMARCATION_RESULTS = [
-  { name: "Barcelona", si: 55, no: 36, blanc: 9 },
-  { name: "Girona", si: 51, no: 40, blanc: 9 },
-  { name: "Lleida", si: 48, no: 41, blanc: 11 },
-  { name: "Tarragona", si: 54, no: 37, blanc: 9 }
-];
-
-export const MOCK_AUDIT_EVENTS: AuditEvent[] = [
-  {
-    id: "evt_1",
-    event_type: "referendum_created",
-    public_message: "S'ha creat el referèndum i configurat les opcions oficials.",
-    created_at: "2030-05-12T08:15:21Z",
-    verified: true
-  },
-  {
-    id: "evt_2",
-    event_type: "token_issued",
-    public_message: "S'ha emès un token anònim de votació.",
-    created_at: "2030-05-12T09:02:11Z",
-    verified: true
-  },
-  {
-    id: "evt_3",
-    event_type: "vote_cast",
-    public_message: "S'ha registrat un vot de manera completament segura.",
-    created_at: "2030-05-12T18:43:07Z",
-    verified: true
-  },
-  {
-    id: "evt_4",
-    event_type: "results_viewed",
-    public_message: "S'han consultat els resultats públics agregats.",
-    created_at: "2030-05-18T20:00:15Z",
-    verified: true
-  }
-];
+export interface FaqItem {
+  category: string;
+  question: string;
+  answer: string;
+}
 
 export const FAQ_CATEGORIES = [
   { id: "projecte", name: "Sobre el projecte", count: 2 },
@@ -76,12 +10,6 @@ export const FAQ_CATEGORIES = [
   { id: "privacitat", name: "Privacitat", count: 2 },
   { id: "resultats", name: "Resultats", count: 2 }
 ];
-
-export interface FaqItem {
-  category: string;
-  question: string;
-  answer: string;
-}
 
 export const FAQ_ITEMS: FaqItem[] = [
   {

@@ -18,7 +18,7 @@ def seed_demo() -> Referendum:
 
 
 def test_health_check_returns_ok():
-    response = Client().get("/api/v1/healthz")
+    response = Client().get("/api/v1/healthz/")
 
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}
@@ -42,13 +42,13 @@ def test_seed_demo_admin_creates_idempotent_superuser_and_admin_login_works():
     call_command("seed_demo_admin")
     call_command("seed_demo_admin")
 
-    user = get_user_model().objects.get(username="admin")
+    user = get_user_model().objects.get(username="yampi")
 
-    assert user.email == "admin@example.test"
+    assert user.email == "yampi@example.test"
     assert user.is_staff is True
     assert user.is_superuser is True
-    assert get_user_model().objects.filter(username="admin").count() == 1
-    assert Client().login(username="admin", password="admin") is True
+    assert get_user_model().objects.filter(username="yampi").count() == 1
+    assert Client().login(username="yampi", password="thos") is True
 
 
 def test_seed_demo_all_creates_demo_backend_without_duplicating_votes_or_admin():
@@ -58,7 +58,7 @@ def test_seed_demo_all_creates_demo_backend_without_duplicating_votes_or_admin()
     call_command("seed_demo_all")
 
     assert Referendum.objects.filter(slug="referendum-2030").count() == 1
-    assert get_user_model().objects.filter(username="admin").count() == 1
+    assert get_user_model().objects.filter(username="yampi").count() == 1
     assert first_vote_count >= 1
     assert first_token_count >= first_vote_count
     assert Vote.objects.count() == first_vote_count
