@@ -2,7 +2,7 @@
 import PageShell from "../astro/PageShell.astro";
 import PageHero from "../astro/PageHero.astro";
 import ResultsWidget from "../../features/results/ui/ResultsWidget";
-import { getRoute } from "../../shared/lib/routes";
+import { getRoute, withBase } from "../../shared/lib/routes";
 import { useTranslations } from "../../shared/i18n/translations";
 import type { Locale } from "../../shared/i18n/translations";
 
@@ -74,7 +74,7 @@ const t = useTranslations(lang);
           <!-- Simulation download anchor -->
           <a 
             class="btn w-full min-h-[48px]" 
-            href="/vots-anònims-referendum2030.json" 
+            href={withBase("/vots-anonims-referendum2030.json")} 
             download="vots-anònims-referendum2030.json"
             onclick={`event.preventDefault(); alert("${t("results.audit.alert")}")`}
             aria-label={t("results.audit.download.aria")}

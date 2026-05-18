@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import { withBase } from "../shared/lib/routes";
 
 interface Props {
   title: string;
@@ -15,7 +16,7 @@ interface Props {
 const {
   title,
   description = "Simulació cívica digital del Referèndum 2030, un referèndum fictici sobre el futur polític de Catalunya. Participa, vota i segueix els resultats en temps real.",
-  ogImage = "/og-image.png",
+  ogImage = withBase("/og-image.png"),
   ogType = "website",
   keywords = "referèndum, Catalunya, 2030, democràcia, vot, independència, simulació cívica, participació ciutadana",
   noindex = false,
@@ -39,7 +40,7 @@ const jsonLd = {
     url: Astro.site?.toString(),
     logo: {
       "@type": "ImageObject",
-      url: new URL("/favicon.svg", Astro.site).toString(),
+      url: new URL(withBase("/favicon.svg"), Astro.site).toString(),
     },
   },
 };
@@ -87,15 +88,15 @@ const jsonLd = {
     <meta name="twitter:image:alt" content={`${title} – Referèndum 2030`} />
 
     <!-- Icons -->
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="icon" href="/favicon.ico" sizes="any" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" href={withBase("/favicon.svg")} type="image/svg+xml" />
+    <link rel="icon" href={withBase("/favicon.ico")} sizes="any" />
+    <link rel="apple-touch-icon" href={withBase("/apple-touch-icon.png")} />
+    <link rel="manifest" href={withBase("/site.webmanifest")} />
     <meta name="theme-color" content="#8B1C2B" />
     <meta name="msapplication-TileColor" content="#8B1C2B" />
 
     <!-- Sitemap -->
-    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="sitemap" href={withBase("/sitemap-index.xml")} />
 
     <!-- Fonts: Outfit + Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

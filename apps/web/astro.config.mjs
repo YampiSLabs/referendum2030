@@ -3,8 +3,12 @@ import sitemap from "@astrojs/sitemap";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "astro/config";
 
+const site = process.env.PUBLIC_SITE_URL || "https://referundum2030.cat";
+const sitePathname = new URL(site).pathname.replace(/\/$/, "");
+
 export default defineConfig({
-  site: "https://referundum2030.cat",
+  site,
+  base: sitePathname === "" ? undefined : sitePathname,
   output: "static",
   integrations: [
     react(),

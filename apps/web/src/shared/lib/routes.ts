@@ -1,5 +1,18 @@
 import type { Locale } from "../i18n/translations";
 
+export const BASE_PATH = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
+
+export function withBase(path: string): string {
+  if (!path.startsWith("/")) return path;
+  return `${BASE_PATH}${path}` || "/";
+}
+
+export function withoutBase(pathname: string): string {
+  if (!BASE_PATH || !pathname.startsWith(BASE_PATH)) return pathname;
+  const stripped = pathname.slice(BASE_PATH.length);
+  return stripped || "/";
+}
+
 export const LOCALIZED_ROUTES = {
   ca: {
     home: "/",
@@ -50,7 +63,7 @@ export type RouteKey = keyof typeof LOCALIZED_ROUTES["ca"];
 export const ROUTES = LOCALIZED_ROUTES.ca; // Backwards compatibility with standard Catalan routes
 
 export function getRoute(key: RouteKey, lang: Locale): string {
-  return LOCALIZED_ROUTES[lang]?.[key] || LOCALIZED_ROUTES["ca"][key];
+  return withBase(LOCALIZED_ROUTES[lang]?.[key] || LOCALIZED_ROUTES["ca"][key]);
 }
 
 export function getLanguageName(lang: Locale): string {
@@ -67,7 +80,7 @@ export function getLanguageName(lang: Locale): string {
 
 export function getPageKeyFromPath(pathname: string): RouteKey {
   // Strip trailing slash for consistency
-  const cleanPath = pathname.replace(/\/$/, "") || "/";
+  const cleanPath = withoutBase(pathname).replace(/\/$/, "") || "/";
   
   if (cleanPath === "/" || cleanPath === "/ca") return "home";
   

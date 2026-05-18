@@ -1,5 +1,5 @@
 ---
-import { getRoute, getPageKeyFromPath } from "../../shared/lib/routes";
+import { getRoute, getPageKeyFromPath, withBase, withoutBase } from "../../shared/lib/routes";
 import { useTranslations } from "../../shared/i18n/translations";
 import type { Locale } from "../../shared/i18n/translations";
 
@@ -11,6 +11,7 @@ interface Props {
 const { activePath, lang = "ca" } = Astro.props;
 const t = useTranslations(lang);
 const pageKey = getPageKeyFromPath(activePath);
+const activeRoutePath = withoutBase(activePath);
 
 const navItems = [
   { href: getRoute("home", lang), label: t("nav.home") },
@@ -22,22 +23,23 @@ const navItems = [
 ];
 
 const isActive = (href: string) => {
-  if (href === "/" || href === "/es/" || href === "/en/" || href === "/fr/" || href === "/ar/" || href === "/zh/") {
-    return activePath === href || activePath === href.slice(0, -1) || (href === "/" && (activePath === "" || activePath === "/"));
+  const routeHref = withoutBase(href);
+  if (routeHref === "/" || routeHref === "/es/" || routeHref === "/en/" || routeHref === "/fr/" || routeHref === "/ar/" || routeHref === "/zh/") {
+    return activeRoutePath === routeHref || activeRoutePath === routeHref.slice(0, -1) || (routeHref === "/" && (activeRoutePath === "" || activeRoutePath === "/"));
   }
   if (href.includes("#")) {
     return false;
   }
-  return activePath.startsWith(href);
+  return activeRoutePath.startsWith(routeHref);
 };
 
 const languages = [
-  { code: "ca", label: "Català", short: "CA", flag: "/flags/ES.svg" },
-  { code: "es", label: "Español", short: "ES", flag: "/flags/ES.svg" },
-  { code: "en", label: "English", short: "EN", flag: "/flags/GB.svg" },
-  { code: "fr", label: "Français", short: "FR", flag: "/flags/FR.svg" },
-  { code: "ar", label: "العربية", short: "AR", flag: "/flags/SA.svg" },
-  { code: "zh", label: "中文", short: "ZH", flag: "/flags/CN.svg" }
+  { code: "ca", label: "Català", short: "CA", flag: withBase("/flags/ES.svg") },
+  { code: "es", label: "Español", short: "ES", flag: withBase("/flags/ES.svg") },
+  { code: "en", label: "English", short: "EN", flag: withBase("/flags/GB.svg") },
+  { code: "fr", label: "Français", short: "FR", flag: withBase("/flags/FR.svg") },
+  { code: "ar", label: "العربية", short: "AR", flag: withBase("/flags/SA.svg") },
+  { code: "zh", label: "中文", short: "ZH", flag: withBase("/flags/CN.svg") }
 ];
 
 const currentLanguageShort = languages.find(l => l.code === lang)?.short || "CA";

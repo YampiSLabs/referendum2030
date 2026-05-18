@@ -4,6 +4,8 @@ interface Props {
 }
 
 const { className = "" } = Astro.props;
+const base = (import.meta.env.BASE_URL || "/").replace(/\/$/, "");
+const withBase = (path: string) => (path.startsWith("/") ? `${base}${path}` || "/" : path);
 ---
 
 <section class={`container py-8 ${className}`}>
@@ -33,7 +35,7 @@ const { className = "" } = Astro.props;
       <p class="text-sm text-crema/90 leading-relaxed font-medium">
         El sistema és auditable, els vots són anònims i els resultats són verificables per qualsevol persona de forma senzilla.
       </p>
-      <a href="/transparencia" class="text-white text-xs font-bold flex items-center gap-1.5 hover:underline mt-2 w-fit">
+      <a href={withBase("/transparencia")} class="text-white text-xs font-bold flex items-center gap-1.5 hover:underline mt-2 w-fit">
         Més informació
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
