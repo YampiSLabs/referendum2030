@@ -456,6 +456,22 @@
                         "type": "boolean",
                         "title": "És actiu"
                     },
+                    "starts_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true,
+                        "title": "Inici"
+                    },
+                    "ends_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "nullable": true,
+                        "title": "Final"
+                    },
+                    "status": {
+                        "type": "string",
+                        "readOnly": true
+                    },
                     "question": {
                         "type": "object",
                         "additionalProperties": {},
@@ -466,6 +482,7 @@
                 "required": [
                     "question",
                     "slug",
+                    "status",
                     "title"
                 ]
             }

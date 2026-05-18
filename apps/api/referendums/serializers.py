@@ -1,3 +1,4 @@
+from django.utils import timezone
 from rest_framework import serializers
 
 from .models import Option, Question, Referendum
@@ -31,10 +32,20 @@ class ReferendumSerializer(serializers.ModelSerializer):
     """
 
     question = serializers.SerializerMethodField()
+    status = serializers.SerializerMethodField()
 
     class Meta:
         model = Referendum
-        fields = ["title", "slug", "description", "is_current", "question"]
+        fields = [
+            "title",
+            "slug",
+            "description",
+            "is_current",
+            "starts_at",
+            "ends_at",
+            "status",
+            "question",
+        ]
 
     def get_question(self, obj: Referendum) -> dict | None:
         question = next(iter(obj.questions.all()), None)
@@ -42,3 +53,15 @@ class ReferendumSerializer(serializers.ModelSerializer):
             return None
         return QuestionSerializer(question, context=self.context).data
 
+    def get_status(self, obj: Referendum) -> str:
+        now = timezone.now()
+        starts_at = obj.starts_at
+        ends_at = obj.ends_at
+
+        if not obj.is_current:
+            return "closed"
+        if starts_at is not None and now < starts_at:
+            return "closed"
+        if ends_at is not None and now > ends_at:
+            return "closed"
+        return "open"

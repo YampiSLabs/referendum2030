@@ -1,9 +1,9 @@
 ---
 import PageShell from "../astro/PageShell.astro";
 import Hero from "../astro/Hero.astro";
-import StatusSummary from "../astro/StatusSummary.astro";
 import StepCard from "../astro/StepCard.astro";
 import SecurityBand from "../astro/SecurityBand.astro";
+import StatusSummaryWidget from "../../features/referendum-status/ui/StatusSummaryWidget";
 import { getRoute } from "../../shared/lib/routes";
 import { useTranslations } from "../../shared/i18n/translations";
 import type { Locale } from "../../shared/i18n/translations";
@@ -14,9 +14,6 @@ interface Props {
 
 const { lang = "ca" } = Astro.props;
 const t = useTranslations(lang);
-
-// Static defaults for homepage summary
-const TOTAL_VOTES = 245730;
 ---
 
 <PageShell lang={lang} title={t("meta.title")} description={t("meta.description")}>
@@ -25,7 +22,7 @@ const TOTAL_VOTES = 245730;
   <Hero lang={lang} />
 
   <!-- Live Stats Banner -->
-  <StatusSummary lang={lang} totalVotes={TOTAL_VOTES} isOpen={true} />
+  <StatusSummaryWidget lang={lang} client:load />
 
   <!-- Process Workflow Guide -->
   <section id="com-funciona" class="container py-16 scroll-mt-20">

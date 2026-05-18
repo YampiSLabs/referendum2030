@@ -231,9 +231,7 @@ export const ui = {
     "status.summary.start": "Inici",
     "status.summary.end": "Final",
     "status.summary.participation": "Participació",
-    "status.summary.votesCast": "vots emesos",
-    "status.summary.date.start": "12 maig 2030",
-    "status.summary.date.end": "18 maig 2030"
+    "status.summary.votesCast": "vots emesos"
   },
   es: {
     // SEO & Head
@@ -467,9 +465,7 @@ export const ui = {
     "status.summary.start": "Inicio",
     "status.summary.end": "Final",
     "status.summary.participation": "Participación",
-    "status.summary.votesCast": "votos emitidos",
-    "status.summary.date.start": "12 mayo 2030",
-    "status.summary.date.end": "18 mayo 2030"
+    "status.summary.votesCast": "votos emitidos"
   },
   en: {
     // SEO & Head
@@ -703,9 +699,7 @@ export const ui = {
     "status.summary.start": "Start",
     "status.summary.end": "End",
     "status.summary.participation": "Participation",
-    "status.summary.votesCast": "votes cast",
-    "status.summary.date.start": "May 12, 2030",
-    "status.summary.date.end": "May 18, 2030"
+    "status.summary.votesCast": "votes cast"
   },
   fr: {
     // SEO & Head
@@ -939,9 +933,7 @@ export const ui = {
     "status.summary.start": "Ouverture",
     "status.summary.end": "Fermeture",
     "status.summary.participation": "Participation",
-    "status.summary.votesCast": "bulletins émis",
-    "status.summary.date.start": "12 mai 2030",
-    "status.summary.date.end": "18 mai 2030"
+    "status.summary.votesCast": "bulletins émis"
   },
   ar: {
     // SEO & Head
@@ -1175,9 +1167,7 @@ export const ui = {
     "status.summary.start": "البداية",
     "status.summary.end": "النهاية",
     "status.summary.participation": "المشاركة",
-    "status.summary.votesCast": "أصوات مدلى بها",
-    "status.summary.date.start": "١٢ مايو ٢٠٣٠",
-    "status.summary.date.end": "١٨ مايو ٢٠٣٠"
+    "status.summary.votesCast": "أصوات مدلى بها"
   },
   zh: {
     // SEO & Head
@@ -1411,9 +1401,7 @@ export const ui = {
     "status.summary.start": "开始时间",
     "status.summary.end": "结束时间",
     "status.summary.participation": "参与人数",
-    "status.summary.votesCast": "张选票已投",
-    "status.summary.date.start": "2030年5月12日",
-    "status.summary.date.end": "2030年5月18日"
+    "status.summary.votesCast": "张选票已投"
   }
 } as const;
 

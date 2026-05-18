@@ -16,9 +16,9 @@ export const ReferendumSchema = z.object({
   title: z.string(),
   slug: z.string(),
   description: z.string(),
-  status: z.enum(["open", "closed"]).default("open"),
-  starts_at: z.string().default("2030-05-12T09:00:00Z"),
-  ends_at: z.string().default("2030-05-18T20:00:00Z"),
+  status: z.enum(["open", "closed"]),
+  starts_at: z.string().nullable(),
+  ends_at: z.string().nullable(),
   total_voters_census: z.number().default(630000),
   question: QuestionSchema,
 });

@@ -26,8 +26,8 @@ export const MOCK_REFERENDUM: MockReferendum = {
   slug: "referendum-2030",
   description: "Simulador cívic digital d'un referèndum fictici sobre el futur polític de Catalunya.",
   status: "open",
-  starts_at: "2030-05-12T09:00:00Z",
-  ends_at: "2030-05-18T20:00:00Z",
+  starts_at: "2026-05-17T22:00:00Z",
+  ends_at: "2030-10-01T16:00:00Z",
   total_voters_census: 630000,
   question: {
     id: 1,

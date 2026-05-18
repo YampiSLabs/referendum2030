@@ -4,6 +4,8 @@ import pytest
 from django.contrib.auth import get_user_model
 from django.core.management import call_command
 from django.test import Client
+from django.utils import timezone
+from django.utils.dateparse import parse_datetime
 
 from audit.models import AuditEvent
 from referendums.models import Referendum
@@ -222,3 +224,32 @@ def test_api_responses_include_machine_readable_demo_disclaimer_header():
 
     assert response.status_code == 200
     assert response.headers["X-Referendum-2030-Demo"] == "fictitious-no-legal-validity"
+
+
+def test_current_referendum_exposes_live_schedule_and_status():
+    referendum = seed_demo()
+    now = timezone.now()
+    referendum.starts_at = now - timezone.timedelta(hours=1)
+    referendum.ends_at = now + timezone.timedelta(hours=1)
+    referendum.save(update_fields=["starts_at", "ends_at"])
+
+    response = Client().get("/api/v1/referendums/current/")
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["status"] == "open"
+    assert parse_datetime(body["starts_at"]) == referendum.starts_at
+    assert parse_datetime(body["ends_at"]) == referendum.ends_at
+
+
+def test_current_referendum_status_closes_outside_schedule_window():
+    referendum = seed_demo()
+    now = timezone.now()
+    referendum.starts_at = now + timezone.timedelta(days=1)
+    referendum.ends_at = now + timezone.timedelta(days=2)
+    referendum.save(update_fields=["starts_at", "ends_at"])
+
+    response = Client().get("/api/v1/referendums/current/")
+
+    assert response.status_code == 200
+    assert response.json()["status"] == "closed"
